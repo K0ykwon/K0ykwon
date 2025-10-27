@@ -7,13 +7,13 @@
 <div align="center">
 
 <!-- GitHub Stats -->
-![YoungKwon's GitHub stats](https://github-readme-stats.vercel.app/api?username=K0ykwon&show_icons=true)
+![YoungKwon's GitHub stats](https://github-readme-stats.vercel.app/api?username=K0ykwon&show_icons=true&theme=dark)
 
 <!-- Streak Stats -->
-![GitHub Streak](https://github-readme-streak-stats.herokuapp.com?user=K0ykwon&hide_border=false)
+![GitHub Streak](https://github-readme-streak-stats.herokuapp.com?user=K0ykwon&hide_border=true&theme=dark)
 
 <!-- Top Languages -->
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=K0ykwon&layout=compact)
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=K0ykwon&layout=compact&theme=dark)
 
 </div>
 
