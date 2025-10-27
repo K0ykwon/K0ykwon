@@ -10,9 +10,6 @@
     <td align="center">
       <img src="https://github-readme-streak-stats.herokuapp.com?user=K0ykwon&hide_border=true&theme=dark" alt="GitHub Streak"/>
     </td>
-    <td align="center">
-      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=K0ykwon&layout=compact&theme=dark&hide_border=true" alt="Top Langs"/>
-    </td>
   </tr>
 </table>
 
