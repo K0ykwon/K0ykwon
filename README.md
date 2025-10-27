@@ -1,6 +1,3 @@
-## 👋 Hi there, I'm **YoungKwon Ko**  
-
----
 
 <table width="100%">
   <tr>
