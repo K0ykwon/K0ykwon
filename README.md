@@ -1,20 +1,20 @@
-[![GitHub Streak](https://streak-stats.demolab.com/?user=K0ykwon)](https://git.io/streak-stats)
 ## 👋 Hi there, I'm **YoungKwon Ko**  
 
 ---
 
-<div align="center">
-
-<!-- GitHub Stats -->
-![YoungKwon's GitHub stats](https://github-readme-stats.vercel.app/api?username=K0ykwon&show_icons=true&theme=dark&hide_border=true)
-
-<!-- Streak Stats -->
-![GitHub Streak](https://github-readme-streak-stats.herokuapp.com?user=K0ykwon&hide_border=true&theme=dark)
-
-<!-- Top Languages -->
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=K0ykwon&layout=compact&theme=dark&hide_border=true)
-
-</div>
+<table width="100%">
+  <tr>
+    <td align="center">
+      <img src="https://github-readme-stats.vercel.app/api?username=K0ykwon&show_icons=true&theme=dark&hide_border=true" alt="YoungKwon's GitHub stats"/>
+    </td>
+    <td align="center">
+      <img src="https://github-readme-streak-stats.herokuapp.com?user=K0ykwon&hide_border=true&theme=dark" alt="GitHub Streak"/>
+    </td>
+    <td align="center">
+      <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=K0ykwon&layout=compact&theme=dark&hide_border=true" alt="Top Langs"/>
+    </td>
+  </tr>
+</table>
 
 ---
 
