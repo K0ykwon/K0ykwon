@@ -1,6 +1,6 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://capsule-render.vercel.app/api?type=blur&color=gradient&text=YoungKwon%20Ko&fontColor=fff">
-  <img src="https://capsule-render.vercel.app/api?type=blur&color=gradient&text=YoungKwon%20Ko&fontColor=000">
+  <source media="(prefers-color-scheme: dark)" srcset="https://capsule-render.vercel.app/api?type=blur&color=gradient&text=Hi%20I'm%20YoungKwon!&fontColor=fff">
+  <img src="https://capsule-render.vercel.app/api?type=blur&color=gradient&text=Hi%20I'm%20YoungKwon!&fontColor=000">
 </picture>
 
 
