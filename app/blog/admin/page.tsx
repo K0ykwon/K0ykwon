@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { supabase, type Post } from "@/lib/supabase";
+import { createSupabaseClient, type Post } from "@/lib/supabase";
 import ThemeToggle from "../../components/ThemeToggle";
 
 type Category = "projects" | "problem-solving" | "paper-review";
@@ -165,8 +165,8 @@ function PostEditor({
       published: form.published,
     };
     const { error: err } = initial.id
-      ? await supabase.from("posts").update(payload).eq("id", initial.id)
-      : await supabase.from("posts").insert(payload);
+      ? await createSupabaseClient().from("posts").update(payload).eq("id", initial.id)
+      : await createSupabaseClient().from("posts").insert(payload);
     setSaving(false);
     if (err) {
       setError(err.message);
@@ -365,7 +365,7 @@ function PostList({
   const handleDelete = async (id: string, title: string) => {
     if (!confirm(`Delete "${title}"?`)) return;
     setDeleting(id);
-    await supabase.from("posts").delete().eq("id", id);
+    await createSupabaseClient().from("posts").delete().eq("id", id);
     setDeleting(null);
     onRefresh();
   };
@@ -482,7 +482,7 @@ export default function AdminPage() {
   };
 
   const fetchPosts = async () => {
-    const { data } = await supabase
+    const { data } = await createSupabaseClient()
       .from("posts")
       .select("*")
       .order("created_at", { ascending: false });

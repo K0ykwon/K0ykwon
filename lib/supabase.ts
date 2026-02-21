@@ -12,23 +12,25 @@ export type Post = {
   updated_at: string;
 };
 
-type SB = ReturnType<typeof createClient>;
-
-// Lazy singleton — created only on first access so env vars are always ready
-let _client: SB | null = null;
-const get = (): SB => {
-  if (!_client) {
-    _client = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-  }
-  return _client;
+type Database = {
+  public: {
+    Tables: {
+      posts: {
+        Row: Post;
+        Insert: Omit<Post, "id" | "created_at" | "updated_at">;
+        Update: Partial<Omit<Post, "id" | "created_at" | "updated_at">>;
+      };
+    };
+  };
 };
 
-export const supabase = new Proxy({} as SB, {
-  get(_, prop) {
-    const val = get()[prop as keyof SB];
-    return typeof val === "function" ? (val as Function).bind(get()) : val;
-  },
-});
+/** Call this inside a function/handler — never at module level. */
+export function createSupabaseClient() {
+  // No Database generic: query results typed as `any`, avoids TypeScript
+  // inference issues with the select() chain on some compiler versions.
+  // Use the Post type above to manually assert result shapes where needed.
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}

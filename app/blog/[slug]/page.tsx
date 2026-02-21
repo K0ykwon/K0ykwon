@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { supabase } from "@/lib/supabase";
+import { createSupabaseClient } from "@/lib/supabase";
 import ThemeToggle from "../../components/ThemeToggle";
 
 const categoryLabel: Record<string, string> = {
@@ -23,16 +23,21 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
-  const { data } = await supabase
-    .from("posts")
-    .select("title, description")
-    .eq("slug", slug)
-    .single();
-  return {
-    title: data?.title ?? "Post Not Found",
-    description: data?.description ?? "",
-  };
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return {};
+  try {
+    const { slug } = await params;
+    const { data } = await createSupabaseClient()
+      .from("posts")
+      .select("*")
+      .eq("slug", slug)
+      .single();
+    return {
+      title: data?.title ?? "Blog Post",
+      description: data?.description ?? "",
+    };
+  } catch {
+    return {};
+  }
 }
 
 export default async function PostPage({
@@ -42,7 +47,7 @@ export default async function PostPage({
 }) {
   const { slug } = await params;
 
-  const { data: post } = await supabase
+  const { data: post } = await createSupabaseClient()
     .from("posts")
     .select("*")
     .eq("slug", slug)
@@ -53,7 +58,6 @@ export default async function PostPage({
 
   return (
     <div className="min-h-screen px-8 py-14 max-w-xl mx-auto">
-      {/* Header */}
       <header className="flex items-center justify-between mb-16">
         <Link
           href="/blog"
@@ -64,7 +68,6 @@ export default async function PostPage({
         <ThemeToggle compact />
       </header>
 
-      {/* Meta */}
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-4">
           <time className="text-[9px] tracking-[0.2em] uppercase text-stone-300 dark:text-stone-600 transition-colors duration-300">
@@ -86,7 +89,6 @@ export default async function PostPage({
 
       <div className="w-full h-px bg-stone-100 dark:bg-stone-800/60 mb-10 transition-colors duration-300" />
 
-      {/* Markdown Content */}
       <div className="prose-blog">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {post.content}

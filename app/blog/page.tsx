@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ThemeToggle from "../components/ThemeToggle";
-import { supabase, type Post } from "@/lib/supabase";
+import { createSupabaseClient, type Post } from "@/lib/supabase";
 
 type Category = "all" | "projects" | "problem-solving" | "paper-review";
 
@@ -52,7 +52,7 @@ function BlogContent() {
   }, [paramCat]);
 
   useEffect(() => {
-    supabase
+    createSupabaseClient()
       .from("posts")
       .select("*")
       .eq("published", true)
