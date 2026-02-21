@@ -27,6 +27,23 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
+/* 터치 기기에서 hover 상태가 tap 후 유지되는 문제 방지 */
+@custom-variant hover {
+  @media (hover: hover) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
+@custom-variant group-hover {
+  @media (hover: hover) {
+    .group:hover & {
+      @slot;
+    }
+  }
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;

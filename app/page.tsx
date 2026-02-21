@@ -32,7 +32,7 @@ export default function Home() {
       {/* ThemeToggle + 이름 + 태그라인 */}
       <div className="flex flex-col items-center animate-fade-up">
         <ThemeToggle />
-        <h1 className="text-5xl font-light tracking-widest uppercase text-stone-800 dark:text-stone-100 transition-colors duration-300">
+        <h1 className="text-center text-5xl font-light tracking-widest uppercase text-stone-800 dark:text-stone-100 transition-colors duration-300">
           Youngkwon{" "}
           <span className="text-stone-400 dark:text-neutral-400">Ko</span>
         </h1>
@@ -66,10 +66,9 @@ export default function Home() {
           <a
             key={link}
             href={`#${link.toLowerCase()}`}
-            className="group relative text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors duration-200"
+            className="pb-px text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors duration-200 border-b border-transparent hover:border-stone-400 dark:hover:border-stone-500"
           >
             {link}
-            <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-stone-400 dark:bg-stone-500 group-hover:w-full transition-all duration-300" />
           </a>
         ))}
       </nav>
