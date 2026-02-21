@@ -6,19 +6,30 @@ const navItems = [
   {
     label: "About",
     href: "#about",
-    sub: ["Story", "Stack", "Contact"],
+    sub: [
+      { label: "Story", href: "#story" },
+      { label: "Stack", href: "#stack" },
+      { label: "Contact", href: "#contact" },
+    ],
     delay: "animate-fade-up-delay-3",
   },
   {
     label: "Blog",
-    href: "#blog",
-    sub: ["All Posts", "Archive"],
+    href: "/blog",
+    sub: [
+      { label: "Projects", href: "/blog?category=projects" },
+      { label: "Problem Solving", href: "/blog?category=problem-solving" },
+      { label: "Paper Review", href: "/blog?category=paper-review" },
+    ],
     delay: "animate-fade-up-delay-4",
   },
   {
     label: "Portfolio",
     href: "#portfolio",
-    sub: ["Work", "Research"],
+    sub: [
+      { label: "Work", href: "#work" },
+      { label: "Research", href: "#research" },
+    ],
     delay: "animate-fade-up-delay-5",
   },
 ];
@@ -91,11 +102,11 @@ export default function NavMenu() {
             >
               {sub.map((item) => (
                 <a
-                  key={item}
-                  href="#"
+                  key={item.label}
+                  href={item.href}
                   className="text-[9px] tracking-[0.2em] uppercase text-stone-400 whitespace-nowrap transition-colors duration-200 hover:text-stone-600 dark:hover:text-stone-300"
                 >
-                  {item}
+                  {item.label}
                 </a>
               ))}
             </div>
