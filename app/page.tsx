@@ -66,7 +66,7 @@ export default function Home() {
           <a
             key={link}
             href={`#${link.toLowerCase()}`}
-            className="pb-px text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors duration-200 border-b border-transparent hover:border-stone-400 dark:hover:border-stone-500"
+            className="min-w-[6rem] text-center pb-px text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors duration-200 border-b border-transparent hover:border-stone-400 dark:hover:border-stone-500"
           >
             {link}
           </a>

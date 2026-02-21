@@ -36,13 +36,6 @@ body {
   }
 }
 
-@custom-variant group-hover {
-  @media (hover: hover) {
-    .group:hover & {
-      @slot;
-    }
-  }
-}
 
 @keyframes fadeUp {
   from {
