@@ -17,6 +17,7 @@ const navItems = [
     label: "Blog",
     href: "/blog",
     sub: [
+      { label: "All Posts", href: "/blog" },
       { label: "Projects", href: "/blog?category=projects" },
       { label: "Problem Solving", href: "/blog?category=problem-solving" },
       { label: "Paper Review", href: "/blog?category=paper-review" },
@@ -36,7 +37,6 @@ const navItems = [
 
 export default function NavMenu() {
   const [activeItem, setActiveItem] = useState<string | null>(null);
-  const lastPointerTypeRef = useRef<string>("mouse");
   const navRef = useRef<HTMLElement>(null);
 
   // 외부 클릭/탭 시 드롭다운 닫기
@@ -67,22 +67,10 @@ export default function NavMenu() {
               if (e.pointerType === "mouse") setActiveItem(null);
             }}
           >
-            {/* 네비게이션 링크 */}
+            {/* 네비게이션 링크 — 모바일/PC 모두 클릭 시 바로 이동 */}
             <a
               href={href}
-              onPointerDown={(e) => {
-                lastPointerTypeRef.current = e.pointerType;
-              }}
-              onClick={(e) => {
-                if (lastPointerTypeRef.current === "touch") {
-                  // 모바일: 탭 → 드롭다운 토글 (페이지 이동 방지)
-                  e.preventDefault();
-                  setActiveItem(isActive ? null : label);
-                } else {
-                  // PC: 클릭 → 페이지 이동 후 드롭다운 닫기
-                  setActiveItem(null);
-                }
-              }}
+              onClick={() => setActiveItem(null)}
               className={`block min-w-[6rem] text-center pb-px text-xs tracking-[0.2em] uppercase transition-colors duration-200 border-b ${
                 isActive
                   ? "text-stone-700 dark:text-stone-200 border-stone-400 dark:border-stone-500"
@@ -92,7 +80,7 @@ export default function NavMenu() {
               {label}
             </a>
 
-            {/* 드롭다운 서브메뉴 */}
+            {/* 드롭다운 서브메뉴 (PC hover) */}
             <div
               className={`absolute top-full left-1/2 -translate-x-1/2 pt-4 z-10 flex flex-col items-center gap-3 transition-all duration-300 ${
                 isActive
