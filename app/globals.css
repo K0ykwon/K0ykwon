@@ -105,16 +105,16 @@ body {
 .dark .prose-blog h1 { color: rgb(231 229 228); }
 .dark .prose-blog h2 { color: rgb(214 211 209); }
 .dark .prose-blog h3 { color: rgb(168 162 158); }
-.dark .prose-blog p { color: rgb(120 113 108); }
+.dark .prose-blog p { color: rgb(168 162 158); }
 .dark .prose-blog a { color: rgb(168 162 158); }
 .dark .prose-blog a:hover { color: rgb(214 211 209); }
 .dark .prose-blog strong { color: rgb(214 211 209); }
 .dark .prose-blog code { background: rgb(28 25 23); color: rgb(214 211 209); }
 .dark .prose-blog pre { background: rgb(28 25 23); }
 .dark .prose-blog pre code { color: rgb(214 211 209); }
-.dark .prose-blog ul li { color: rgb(120 113 108); }
-.dark .prose-blog ul li::before { color: rgb(68 64 60); }
-.dark .prose-blog ol li { color: rgb(120 113 108); }
+.dark .prose-blog ul li { color: rgb(168 162 158); }
+.dark .prose-blog ul li::before { color: rgb(87 83 78); }
+.dark .prose-blog ol li { color: rgb(168 162 158); }
 .dark .prose-blog blockquote { border-left-color: rgb(68 64 60); color: rgb(87 83 78); }
 .dark .prose-blog hr { border-top-color: rgb(41 37 36); }
 .dark .prose-blog th { border-bottom-color: rgb(41 37 36); color: rgb(168 162 158); }
