@@ -41,7 +41,7 @@ function SunIcon({ size, strokeWidth = 1, className }: { size: number; strokeWid
 
 const MOON_SIZE = 144;
 const SUN_SIZE = 170;
-const SUN_DOWN = 0; // 태양 오프셋(px)
+const SUN_DOWN = 5; // 태양 오프셋(px)
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(false);
@@ -74,7 +74,7 @@ export default function ThemeToggle() {
         style={{ height: MOON_SIZE * 0.66, width: SUN_SIZE }}
       >
         {/* Sun — 호버 레이어(group-hover) + 토글 애니메이션 중첩 */}
-        <div className="absolute top-0 left-0 transition-transform duration-200 group-hover:translate-y-2">
+        <div className="absolute top-0 left-0 transition-transform duration-400 group-hover:translate-y-2">
           <div
             className="transition-transform duration-500 ease-in-out"
             style={{
@@ -83,13 +83,13 @@ export default function ThemeToggle() {
                 : `translateY(${SUN_DOWN}px)`,
             }}
           >
-            <SunIcon size={SUN_SIZE} strokeWidth={0.6} className="text-stone-900 dark:text-stone-100" />
+            <SunIcon size={SUN_SIZE} strokeWidth={0.6} className="text-stone-200 dark:text-stone-500 group-hover:text-stone-400 transition-colors duration-200" />
           </div>
         </div>
 
         {/* Moon — 호버 레이어(group-hover) + 토글 애니메이션 중첩 */}
         <div
-          className="absolute top-0 transition-transform duration-200 group-hover:translate-y-2"
+          className="absolute top-0 transition-transform duration-400 group-hover:translate-y-2"
           style={{ left: (SUN_SIZE - MOON_SIZE) / 2 }}
         >
           <div
@@ -98,7 +98,7 @@ export default function ThemeToggle() {
               transform: isDark ? "translateY(0)" : `translateY(${MOON_SIZE}px)`,
             }}
           >
-            <Moon size={MOON_SIZE} strokeWidth={0.7} className="text-slate-400 dark:text-slate-300" />
+            <Moon size={MOON_SIZE} strokeWidth={0.7} className="text-neutral-600 dark:text-neutral-800 group-hover:text-neutral-500" />
           </div>
         </div>
       </div>

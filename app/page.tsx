@@ -4,22 +4,22 @@ import ThemeToggle from "./components/ThemeToggle";
 const socialLinks = [
   {
     icon: Github,
-    href: "https://github.com/youngkwonko",
+    href: "https://github.com/K0ykwon",
     label: "GitHub",
   },
   {
     icon: Mail,
-    href: "mailto:youngkwon@example.com",
+    href: "mailto:yko081524@yonsei.ac.kr",
     label: "Email",
   },
   {
     icon: Linkedin,
-    href: "https://linkedin.com/in/youngkwonko",
+    href: "https://linkedin.com/in/koykwon",
     label: "LinkedIn",
   },
   {
     icon: Instagram,
-    href: "https://instagram.com/youngkwonko",
+    href: "https://instagram.com/koykwon_",
     label: "Instagram",
   },
 ];
@@ -34,7 +34,7 @@ export default function Home() {
         <ThemeToggle />
         <h1 className="text-5xl font-light tracking-widest uppercase text-stone-800 dark:text-stone-100 transition-colors duration-300">
           Youngkwon{" "}
-          <span className="text-stone-400 dark:text-stone-500">Ko</span>
+          <span className="text-stone-400 dark:text-neutral-400">Ko</span>
         </h1>
       </div>
 
