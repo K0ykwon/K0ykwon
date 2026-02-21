@@ -76,3 +76,46 @@ body {
   opacity: 0;
   animation: fadeUp 0.7s ease-out 0.75s forwards;
 }
+
+/* ── Markdown prose (post detail + admin preview) ────────────────────────── */
+.prose-blog h1 { font-size: 1.375rem; font-weight: 300; letter-spacing: 0.04em; margin-top: 2.5rem; margin-bottom: 0.875rem; color: rgb(41 37 36); transition: color 0.3s; }
+.prose-blog h2 { font-size: 1.0625rem; font-weight: 300; letter-spacing: 0.04em; margin-top: 2rem; margin-bottom: 0.75rem; color: rgb(68 64 60); transition: color 0.3s; }
+.prose-blog h3 { font-size: 0.9375rem; font-weight: 400; margin-top: 1.5rem; margin-bottom: 0.5rem; color: rgb(87 83 78); transition: color 0.3s; }
+.prose-blog p { font-size: 0.875rem; line-height: 1.8; margin-bottom: 1.25rem; color: rgb(120 113 108); transition: color 0.3s; }
+.prose-blog a { text-decoration: underline; text-underline-offset: 3px; color: rgb(87 83 78); transition: color 0.2s; }
+.prose-blog a:hover { color: rgb(41 37 36); }
+.prose-blog strong { font-weight: 500; color: rgb(68 64 60); }
+.prose-blog em { font-style: italic; }
+.prose-blog code { font-family: var(--font-geist-mono); font-size: 0.8125rem; background: rgb(245 245 244); padding: 0.15em 0.4em; border-radius: 3px; color: rgb(68 64 60); }
+.prose-blog pre { background: rgb(245 245 244); padding: 1.25rem; border-radius: 4px; overflow-x: auto; margin-bottom: 1.5rem; }
+.prose-blog pre code { background: none; padding: 0; color: rgb(68 64 60); }
+.prose-blog ul { padding-left: 0; margin-bottom: 1.25rem; list-style: none; }
+.prose-blog ul li { font-size: 0.875rem; line-height: 1.8; margin-bottom: 0.25rem; color: rgb(120 113 108); padding-left: 1.25rem; position: relative; }
+.prose-blog ul li::before { content: '—'; position: absolute; left: 0; color: rgb(168 162 158); }
+.prose-blog ol { padding-left: 1.5rem; margin-bottom: 1.25rem; }
+.prose-blog ol li { font-size: 0.875rem; line-height: 1.8; margin-bottom: 0.25rem; color: rgb(120 113 108); }
+.prose-blog blockquote { border-left: 2px solid rgb(214 211 209); padding-left: 1rem; margin: 1.5rem 0; color: rgb(168 162 158); font-style: italic; }
+.prose-blog hr { border: none; border-top: 1px solid rgb(231 229 228); margin: 2rem 0; }
+.prose-blog img { max-width: 100%; border-radius: 4px; margin: 1.5rem 0; }
+.prose-blog table { width: 100%; border-collapse: collapse; font-size: 0.875rem; margin-bottom: 1.5rem; }
+.prose-blog th { border-bottom: 1px solid rgb(214 211 209); padding: 0.5rem 0.75rem; text-align: left; font-weight: 400; color: rgb(87 83 78); }
+.prose-blog td { border-bottom: 1px solid rgb(245 245 244); padding: 0.5rem 0.75rem; color: rgb(120 113 108); }
+
+/* dark mode */
+.dark .prose-blog h1 { color: rgb(231 229 228); }
+.dark .prose-blog h2 { color: rgb(214 211 209); }
+.dark .prose-blog h3 { color: rgb(168 162 158); }
+.dark .prose-blog p { color: rgb(120 113 108); }
+.dark .prose-blog a { color: rgb(168 162 158); }
+.dark .prose-blog a:hover { color: rgb(214 211 209); }
+.dark .prose-blog strong { color: rgb(214 211 209); }
+.dark .prose-blog code { background: rgb(28 25 23); color: rgb(214 211 209); }
+.dark .prose-blog pre { background: rgb(28 25 23); }
+.dark .prose-blog pre code { color: rgb(214 211 209); }
+.dark .prose-blog ul li { color: rgb(120 113 108); }
+.dark .prose-blog ul li::before { color: rgb(68 64 60); }
+.dark .prose-blog ol li { color: rgb(120 113 108); }
+.dark .prose-blog blockquote { border-left-color: rgb(68 64 60); color: rgb(87 83 78); }
+.dark .prose-blog hr { border-top-color: rgb(41 37 36); }
+.dark .prose-blog th { border-bottom-color: rgb(41 37 36); color: rgb(168 162 158); }
+.dark .prose-blog td { border-bottom-color: rgb(28 25 23); color: rgb(87 83 78); }
