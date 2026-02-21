@@ -1,5 +1,6 @@
 import { Github, Mail, Linkedin, Instagram } from "lucide-react";
 import ThemeToggle from "./components/ThemeToggle";
+import NavMenu from "./components/NavMenu";
 
 const socialLinks = [
   {
@@ -23,8 +24,6 @@ const socialLinks = [
     label: "Instagram",
   },
 ];
-
-const navLinks = ["About", "Blog", "Portfolio"];
 
 export default function Home() {
   return (
@@ -60,18 +59,8 @@ export default function Home() {
       {/* Divider */}
       <div className="w-px h-8 bg-stone-200 dark:bg-stone-700 transition-colors duration-300 animate-fade-up-delay-2" />
 
-      {/* Navigation */}
-      <nav className="flex items-center gap-10 animate-fade-up-delay-3">
-        {navLinks.map((link) => (
-          <a
-            key={link}
-            href={`#${link.toLowerCase()}`}
-            className="min-w-[6rem] text-center pb-px text-xs tracking-[0.2em] uppercase text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors duration-200 border-b border-transparent hover:border-stone-400 dark:hover:border-stone-500"
-          >
-            {link}
-          </a>
-        ))}
-      </nav>
+      {/* Navigation (각 항목 개별 stagger 애니메이션 + 드롭다운) */}
+      <NavMenu />
     </main>
   );
 }
