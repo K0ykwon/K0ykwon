@@ -6,6 +6,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { createSupabaseClient } from "@/lib/supabase";
 import ThemeToggle from "../../components/ThemeToggle";
+import GiscusComments from "../../components/GiscusComments";
 
 const categoryLabel: Record<string, string> = {
   projects: "Projects",
@@ -94,6 +95,8 @@ export default async function PostPage({
           {post.content}
         </ReactMarkdown>
       </div>
+
+      <GiscusComments />
     </div>
   );
 }
