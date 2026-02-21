@@ -41,7 +41,7 @@ function SunIcon({ size, strokeWidth = 1, className }: { size: number; strokeWid
 
 const MOON_SIZE = 144;
 const SUN_SIZE = 170;
-const SUN_DOWN = 0; // 태양 오프셋(px)
+const SUN_DOWN = 5; // 태양 오프셋(px)
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(false);
@@ -83,7 +83,7 @@ export default function ThemeToggle() {
                 : `translateY(${SUN_DOWN}px)`,
             }}
           >
-            <SunIcon size={SUN_SIZE} strokeWidth={0.6} className="text-stone-900 dark:text-stone-100" />
+            <SunIcon size={SUN_SIZE} strokeWidth={0.6} className="text-stone-400 dark:text-stone-500" />
           </div>
         </div>
 
@@ -98,7 +98,7 @@ export default function ThemeToggle() {
               transform: isDark ? "translateY(0)" : `translateY(${MOON_SIZE}px)`,
             }}
           >
-            <Moon size={MOON_SIZE} strokeWidth={0.7} className="text-slate-400 dark:text-slate-300" />
+            <Moon size={MOON_SIZE} strokeWidth={0.7} className="text-neutral-400 dark:text-neutral-500" />
           </div>
         </div>
       </div>
