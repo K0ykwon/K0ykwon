@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Moon } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 
 // 원과 선 간격을 직접 제어하는 커스텀 태양 SVG
 function SunIcon({ size, strokeWidth = 1, className }: { size: number; strokeWidth?: number; className?: string }) {
@@ -43,7 +43,7 @@ const MOON_SIZE = 144;
 const SUN_SIZE = 170;
 const SUN_DOWN = 5; // 태양 오프셋(px)
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ compact = false }: { compact?: boolean }) {
   const [isDark, setIsDark] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -62,6 +62,22 @@ export default function ThemeToggle() {
       localStorage.setItem("theme", "light");
     }
   };
+
+  if (compact) {
+    return (
+      <button
+        onClick={toggle}
+        aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+        className="text-stone-300 hover:text-stone-600 dark:text-stone-600 dark:hover:text-stone-300 transition-colors duration-200 cursor-pointer focus:outline-none"
+      >
+        {isDark ? (
+          <Sun size={14} strokeWidth={1.5} />
+        ) : (
+          <Moon size={14} strokeWidth={1.5} />
+        )}
+      </button>
+    );
+  }
 
   return (
     <button
