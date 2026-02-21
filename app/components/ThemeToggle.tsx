@@ -66,8 +66,8 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onPointerEnter={(e) => { if (e.pointerType === "mouse") setIsHovered(true); }}
+      onPointerLeave={(e) => { if (e.pointerType === "mouse") setIsHovered(false); }}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       className="cursor-pointer focus:outline-none"
     >
