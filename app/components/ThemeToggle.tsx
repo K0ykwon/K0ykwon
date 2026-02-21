@@ -45,6 +45,7 @@ const SUN_DOWN = 5; // 태양 오프셋(px)
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains("dark"));
@@ -65,16 +66,21 @@ export default function ThemeToggle() {
   return (
     <button
       onClick={toggle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      className="cursor-pointer focus:outline-none group"
+      className="cursor-pointer focus:outline-none"
     >
       {/* 클립 경계 고정 — overflow-hidden은 여기서만 */}
       <div
         className="relative overflow-hidden"
         style={{ height: MOON_SIZE * 0.66, width: SUN_SIZE }}
       >
-        {/* Sun — 호버 레이어(group-hover) + 토글 애니메이션 중첩 */}
-        <div className="absolute top-0 left-0 transition-transform duration-400 group-hover:translate-y-2">
+        {/* Sun — JS hover state + 토글 애니메이션 중첩 */}
+        <div
+          className="absolute top-0 left-0 transition-transform duration-400"
+          style={{ transform: isHovered ? "translateY(0.5rem)" : "translateY(0)" }}
+        >
           <div
             className="transition-transform duration-500 ease-in-out"
             style={{
@@ -83,14 +89,23 @@ export default function ThemeToggle() {
                 : `translateY(${SUN_DOWN}px)`,
             }}
           >
-            <SunIcon size={SUN_SIZE} strokeWidth={0.6} className="text-stone-200 dark:text-stone-500 group-hover:text-stone-400 transition-colors duration-200" />
+            <SunIcon
+              size={SUN_SIZE}
+              strokeWidth={0.6}
+              className={`transition-colors duration-200 ${
+                isHovered ? "text-stone-400" : "text-stone-200 dark:text-stone-500"
+              }`}
+            />
           </div>
         </div>
 
-        {/* Moon — 호버 레이어(group-hover) + 토글 애니메이션 중첩 */}
+        {/* Moon — JS hover state + 토글 애니메이션 중첩 */}
         <div
-          className="absolute top-0 transition-transform duration-400 group-hover:translate-y-2"
-          style={{ left: (SUN_SIZE - MOON_SIZE) / 2 }}
+          className="absolute top-0 transition-transform duration-400"
+          style={{
+            left: (SUN_SIZE - MOON_SIZE) / 2,
+            transform: isHovered ? "translateY(0.5rem)" : "translateY(0)",
+          }}
         >
           <div
             className="transition-transform duration-500 ease-in-out"
@@ -98,7 +113,13 @@ export default function ThemeToggle() {
               transform: isDark ? "translateY(0)" : `translateY(${MOON_SIZE}px)`,
             }}
           >
-            <Moon size={MOON_SIZE} strokeWidth={0.7} className="text-neutral-600 dark:text-neutral-800 group-hover:text-neutral-500" />
+            <Moon
+              size={MOON_SIZE}
+              strokeWidth={0.7}
+              className={`transition-colors duration-200 ${
+                isHovered ? "text-neutral-500" : "text-neutral-600 dark:text-neutral-800"
+              }`}
+            />
           </div>
         </div>
       </div>
