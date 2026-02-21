@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -138,6 +138,9 @@ function PostEditor({
   const [mobileTab, setMobileTab] = useState<"edit" | "preview">("edit");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const set = <K extends keyof FormData>(k: K, v: FormData[K]) => {
     setForm((f) => {
@@ -175,6 +178,68 @@ function PostEditor({
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = "";
+
+    if (!file.type.startsWith("image/")) {
+      setError("이미지 파일만 업로드 가능합니다");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setError("이미지는 5MB 이하여야 합니다");
+      return;
+    }
+
+    setUploading(true);
+    setError("");
+
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const base = file.name
+      .replace(/\.[^/.]+$/, "")
+      .replace(/[^a-zA-Z0-9-_]/g, "-")
+      .slice(0, 40);
+    const filename = `${Date.now()}-${base}.${ext}`;
+
+    const supabase = createSupabaseClient();
+    const { error: uploadError } = await supabase.storage
+      .from("blog-images")
+      .upload(filename, file, { contentType: file.type });
+
+    if (uploadError) {
+      setError(`업로드 실패: ${uploadError.message}`);
+      setUploading(false);
+      return;
+    }
+
+    const { data: urlData } = supabase.storage
+      .from("blog-images")
+      .getPublicUrl(filename);
+
+    const markdownImage = `![](${urlData.publicUrl})`;
+
+    const textarea = textareaRef.current;
+    if (textarea) {
+      const start = textarea.selectionStart ?? form.content.length;
+      const end = textarea.selectionEnd ?? form.content.length;
+      const before = form.content.slice(0, start);
+      const after = form.content.slice(end);
+      const separator = before.length > 0 && !before.endsWith("\n\n") ? "\n\n" : "";
+      const newContent = before + separator + markdownImage + "\n\n" + after;
+      set("content", newContent);
+      setTimeout(() => {
+        textarea.focus();
+        const newPos = (before + separator + markdownImage + "\n\n").length;
+        textarea.setSelectionRange(newPos, newPos);
+      }, 0);
+    } else {
+      set("content", form.content + "\n\n" + markdownImage + "\n\n");
+    }
+
+    setUploading(false);
+  };
+
   const inputClass =
     "w-full bg-transparent border-b border-stone-200 dark:border-stone-700/60 py-2 text-sm font-light text-stone-700 dark:text-stone-300 outline-none focus:border-stone-400 dark:focus:border-stone-500 transition-colors duration-200 placeholder:text-stone-200 dark:placeholder:text-stone-700";
 
@@ -194,9 +259,23 @@ function PostEditor({
               {error}
             </span>
           )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleImageUpload}
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading || saving}
+            className="text-[9px] tracking-[0.3em] uppercase text-stone-400 dark:text-stone-500 border border-stone-200 dark:border-stone-700 px-5 py-2.5 hover:text-stone-700 dark:hover:text-stone-200 hover:border-stone-400 dark:hover:border-stone-500 transition-colors duration-200 cursor-pointer disabled:opacity-40"
+          >
+            {uploading ? "업로드 중..." : "이미지 업로드"}
+          </button>
           <button
             onClick={handleSave}
-            disabled={saving}
+            disabled={saving || uploading}
             className="text-[9px] tracking-[0.3em] uppercase text-stone-400 dark:text-stone-500 border border-stone-200 dark:border-stone-700 px-5 py-2.5 hover:text-stone-700 dark:hover:text-stone-200 hover:border-stone-400 dark:hover:border-stone-500 transition-colors duration-200 cursor-pointer disabled:opacity-40"
           >
             {saving ? "Saving..." : "Save"}
@@ -312,6 +391,7 @@ function PostEditor({
               Markdown
             </label>
             <textarea
+              ref={textareaRef}
               value={form.content}
               onChange={(e) => set("content", e.target.value)}
               className="w-full h-full bg-stone-50/50 dark:bg-stone-900/30 border border-stone-100 dark:border-stone-800/60 rounded-sm p-4 font-mono text-xs text-stone-600 dark:text-stone-400 outline-none focus:border-stone-300 dark:focus:border-stone-600 resize-none transition-colors duration-200 leading-relaxed"
