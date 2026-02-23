@@ -7,7 +7,7 @@ import remarkGfm from "remark-gfm";
 import { createSupabaseClient, type Post } from "@/lib/supabase";
 import ThemeToggle from "../../components/ThemeToggle";
 
-type Category = "projects" | "problem-solving" | "paper-review";
+type Category = "dev-log" | "problem-solving" | "paper-review" | "etc";
 
 type FormData = {
   title: string;
@@ -21,7 +21,7 @@ type FormData = {
 const emptyForm: FormData = {
   title: "",
   slug: "",
-  category: "projects",
+  category: "dev-log",
   description: "",
   content: "",
   published: true,
@@ -42,9 +42,10 @@ function fmtDate(iso: string) {
 }
 
 const categoryLabel: Record<Category, string> = {
-  projects: "Projects",
+  "dev-log": "Dev Log",
   "problem-solving": "Problem Solving",
   "paper-review": "Paper Review",
+  etc: "Etc",
 };
 
 // ─── Login Form ─────────────────────────────────────────────────────────────
@@ -322,9 +323,10 @@ function PostEditor({
               onChange={(e) => set("category", e.target.value as Category)}
               className="bg-transparent border-b border-stone-200 dark:border-stone-700/60 py-2 text-sm font-light text-stone-700 dark:text-stone-300 outline-none focus:border-stone-400 dark:focus:border-stone-500 transition-colors duration-200 cursor-pointer"
             >
-              <option value="projects">Projects</option>
+              <option value="dev-log">Dev Log</option>
               <option value="problem-solving">Problem Solving</option>
               <option value="paper-review">Paper Review</option>
+              <option value="etc">Etc</option>
             </select>
           </div>
           <div className="flex flex-col gap-1.5">

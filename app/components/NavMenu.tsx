@@ -18,9 +18,10 @@ const navItems = [
     href: "/blog",
     sub: [
       { label: "All Posts", href: "/blog" },
-      { label: "Projects", href: "/blog?category=projects" },
+      { label: "Dev Log", href: "/blog?category=dev-log" },
       { label: "Problem Solving", href: "/blog?category=problem-solving" },
       { label: "Paper Review", href: "/blog?category=paper-review" },
+      { label: "Etc", href: "/blog?category=etc" },
     ],
     delay: "animate-fade-up-delay-4",
   },

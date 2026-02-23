@@ -6,7 +6,7 @@ create table if not exists public.posts (
   slug        text        not null unique,
   content     text        not null default '',
   description text        not null default '',
-  category    text        not null check (category in ('projects', 'problem-solving', 'paper-review')),
+  category    text        not null check (category in ('dev-log', 'problem-solving', 'paper-review', 'etc')),
   published   boolean     not null default true,
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()

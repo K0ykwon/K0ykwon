@@ -6,7 +6,7 @@ export type Post = {
   slug: string;
   content: string;
   description: string;
-  category: "projects" | "problem-solving" | "paper-review";
+  category: "dev-log" | "problem-solving" | "paper-review" | "etc";
   published: boolean;
   created_at: string;
   updated_at: string;

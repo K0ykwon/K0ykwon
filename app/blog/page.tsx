@@ -6,19 +6,21 @@ import Link from "next/link";
 import ThemeToggle from "../components/ThemeToggle";
 import { createSupabaseClient, type Post } from "@/lib/supabase";
 
-type Category = "all" | "projects" | "problem-solving" | "paper-review";
+type Category = "all" | "dev-log" | "problem-solving" | "paper-review" | "etc";
 
 const categories: { id: Category; label: string }[] = [
   { id: "all", label: "All" },
-  { id: "projects", label: "Projects" },
+  { id: "dev-log", label: "Dev Log" },
   { id: "problem-solving", label: "Problem Solving" },
   { id: "paper-review", label: "Paper Review" },
+  { id: "etc", label: "Etc" },
 ];
 
 const categoryLabel: Record<Exclude<Category, "all">, string> = {
-  projects: "Projects",
+  "dev-log": "Dev Log",
   "problem-solving": "Problem Solving",
   "paper-review": "Paper Review",
+  etc: "Etc",
 };
 
 function fmtDate(iso: string) {
