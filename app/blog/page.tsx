@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ThemeToggle from "../components/ThemeToggle";
@@ -32,9 +32,9 @@ function toDateStr(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-type GridCell = { dateStr: string; count: number; future: boolean; inMonth: boolean };
+type GridCell = { dateStr: string; count: number; future: boolean };
 
-function getMonthGrid(posts: Post[], year: number, month: number): GridCell[][] {
+function getYearGrid(posts: Post[]): GridCell[][] {
   const counts: Record<string, number> = {};
   posts.forEach((p) => {
     const day = p.created_at.slice(0, 10);
@@ -45,14 +45,14 @@ function getMonthGrid(posts: Post[], year: number, month: number): GridCell[][] 
   today.setHours(0, 0, 0, 0);
   const todayStr = toDateStr(today);
 
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
+  // Start from the Sunday of the week ~52 weeks ago
+  const start = new Date(today);
+  start.setDate(start.getDate() - 52 * 7);
+  start.setDate(start.getDate() - start.getDay());
 
-  const start = new Date(firstDay);
-  start.setDate(start.getDate() - start.getDay()); // back to Sunday
-
-  const end = new Date(lastDay);
-  end.setDate(end.getDate() + (6 - end.getDay())); // forward to Saturday
+  // End at the Saturday of the current week
+  const end = new Date(today);
+  end.setDate(end.getDate() + (6 - end.getDay()));
 
   const weeks: GridCell[][] = [];
   const cur = new Date(start);
@@ -61,12 +61,7 @@ function getMonthGrid(posts: Post[], year: number, month: number): GridCell[][] 
     const week: GridCell[] = [];
     for (let d = 0; d < 7; d++) {
       const dateStr = toDateStr(cur);
-      week.push({
-        dateStr,
-        count: counts[dateStr] ?? 0,
-        future: dateStr > todayStr,
-        inMonth: cur.getMonth() === month && cur.getFullYear() === year,
-      });
+      week.push({ dateStr, count: counts[dateStr] ?? 0, future: dateStr > todayStr });
       cur.setDate(cur.getDate() + 1);
     }
     weeks.push(week);
@@ -82,10 +77,11 @@ function BlogContent() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<Category>("all");
-  const [viewDate, setViewDate] = useState<{ year: number; month: number }>(() => {
-    const n = new Date();
-    return { year: n.getFullYear(), month: n.getMonth() };
-  });
+
+  // Activity graph: sliding window
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [visibleWeeks, setVisibleWeeks] = useState(26);
+  const [endOffset, setEndOffset] = useState(0); // 0 = most recent end
 
   useEffect(() => {
     if (paramCat && categories.some((c) => c.id === paramCat)) {
@@ -105,38 +101,54 @@ function BlogContent() {
       });
   }, []);
 
-  const now = new Date();
-  const isCurrentMonth = viewDate.year === now.getFullYear() && viewDate.month === now.getMonth();
-  const monthLabel = new Date(viewDate.year, viewDate.month, 1)
-    .toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  // Measure container width → compute how many week-columns fit
+  useEffect(() => {
+    const measure = () => {
+      if (!gridRef.current) return;
+      const w = gridRef.current.offsetWidth;
+      // left label col ≈ 13px + 5px gap; each week col = 10px cell + 2px gap = 12px
+      const n = Math.floor((w - 18 + 2) / 12);
+      setVisibleWeeks(Math.max(4, n));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    if (gridRef.current) ro.observe(gridRef.current);
+    return () => ro.disconnect();
+  }, []);
 
-  const shiftMonth = (base: { year: number; month: number }, delta: number) => {
-    let m = base.month + delta;
-    let y = base.year;
-    while (m < 0) { m += 12; y--; }
-    while (m > 11) { m -= 12; y++; }
-    return { year: y, month: m };
-  };
+  const allWeeks = getYearGrid(posts);
+  const totalWeeks = allWeeks.length;
 
-  const pm2 = shiftMonth(viewDate, -2);
-  const pm1 = shiftMonth(viewDate, -1);
-  const nm1 = shiftMonth(viewDate, +1);
-  const nm2 = shiftMonth(viewDate, +2);
+  const endWeek = totalWeeks - 1 - endOffset;
+  const startWeek = Math.max(0, endWeek - visibleWeeks + 1);
+  const visibleSlice = allWeeks.slice(startWeek, endWeek + 1);
 
-  const prevWeeks2 = getMonthGrid(posts, pm2.year, pm2.month);
-  const prevWeeks  = getMonthGrid(posts, pm1.year, pm1.month);
-  const weeks      = getMonthGrid(posts, viewDate.year, viewDate.month);
-  const nextWeeks  = getMonthGrid(posts, nm1.year, nm1.month);
-  const nextWeeks2 = getMonthGrid(posts, nm2.year, nm2.month);
+  const shift = Math.max(1, Math.round(visibleWeeks * 0.3));
+  const canGoLeft = startWeek > 0;
+  const canGoRight = endOffset > 0;
 
-  const goPrev = () =>
-    setViewDate(({ year, month }) =>
-      month === 0 ? { year: year - 1, month: 11 } : { year, month: month - 1 }
-    );
-  const goNext = () =>
-    setViewDate(({ year, month }) =>
-      month === 11 ? { year: year + 1, month: 0 } : { year, month: month + 1 }
-    );
+  const goLeft = () =>
+    setEndOffset((o) => Math.min(o + shift, totalWeeks - visibleWeeks));
+  const goRight = () =>
+    setEndOffset((o) => Math.max(0, o - shift));
+
+  // Month labels for visible slice
+  const monthLabels: { label: string; weekIdx: number }[] = [];
+  let lastM = -1;
+  visibleSlice.forEach((week, wi) => {
+    const m = parseInt(week[0].dateStr.slice(5, 7));
+    if (m !== lastM) {
+      monthLabels.push({
+        label: new Date(
+          parseInt(week[0].dateStr.slice(0, 4)),
+          m - 1,
+          1
+        ).toLocaleDateString("en-US", { month: "short" }),
+        weekIdx: wi,
+      });
+      lastM = m;
+    }
+  });
 
   const recent = posts.slice(0, 3);
   const filtered = posts.filter(
@@ -168,165 +180,99 @@ function BlogContent() {
 
       {/* Activity Graph */}
       <section className="mb-14 animate-fade-up-delay-1">
-        {/* Activity label */}
-        <p className="text-[9px] tracking-[0.3em] uppercase text-stone-300 dark:text-stone-600 mb-3 transition-colors duration-300">
-          Activity
-        </p>
-        {/* Navigation — centered */}
-        <div className="flex items-center justify-center gap-3 mb-5">
-          <button
-            onClick={goPrev}
-            className="text-[9px] text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 transition-colors duration-200 cursor-pointer leading-none"
-          >
-            ←
-          </button>
-          <span className="text-[9px] tracking-[0.15em] uppercase text-stone-400 dark:text-stone-500 w-[4.5rem] text-center transition-colors duration-300">
-            {monthLabel}
-          </span>
-          <button
-            onClick={goNext}
-            disabled={isCurrentMonth}
-            className="text-[9px] text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 transition-colors duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-default leading-none"
-          >
-            →
-          </button>
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-stone-300 dark:text-stone-600 transition-colors duration-300">
+            Activity
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={goLeft}
+              disabled={!canGoLeft}
+              className="text-[9px] text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 transition-colors duration-200 cursor-pointer disabled:opacity-25 disabled:cursor-default leading-none"
+            >
+              ←
+            </button>
+            <button
+              onClick={goRight}
+              disabled={!canGoRight}
+              className="text-[9px] text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 transition-colors duration-200 cursor-pointer disabled:opacity-25 disabled:cursor-default leading-none"
+            >
+              →
+            </button>
+          </div>
         </div>
 
-        {/* 5-month carousel — justify-between to fill width */}
-        <div className="flex items-start justify-between">
-          {/* Helper: side grid (cells only, no labels) */}
-          {(
-            [
-              { monthWeeks: prevWeeks2, opacity: "opacity-[0.12]", onClick: goPrev },
-              { monthWeeks: prevWeeks,  opacity: "opacity-[0.28]", onClick: goPrev },
-            ] as const
-          ).map(({ monthWeeks, opacity, onClick }, idx) => (
-            <div
-              key={idx}
-              className={`${opacity} flex-shrink-0 cursor-pointer transition-opacity duration-300`}
-              onClick={onClick}
-            >
-              <div className="h-[17px]" />
-              <div className="flex flex-col gap-[2px]">
-                {monthWeeks.map((week, wi) => (
-                  <div key={wi} className="flex gap-[2px]">
-                    {week.map((cell, di) => {
-                      const lvl = !cell.inMonth
-                        ? -1
-                        : cell.count === 0 ? 0 : cell.count === 1 ? 1 : cell.count <= 3 ? 2 : 3;
-                      return (
-                        <div
-                          key={di}
-                          className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-300 ${
-                            lvl === -1 ? "bg-transparent"
-                            : lvl === 0 ? "bg-stone-100 dark:bg-stone-800"
-                            : lvl === 1 ? "bg-stone-300 dark:bg-stone-600"
-                            : lvl === 2 ? "bg-stone-500 dark:bg-stone-400"
-                            : "bg-stone-700 dark:bg-stone-200"
-                          }`}
-                        />
-                      );
-                    })}
-                  </div>
-                ))}
+        {/* Grid */}
+        <div ref={gridRef} className="flex gap-0">
+          {/* Day labels (M W F) */}
+          <div className="flex flex-col gap-[2px] mr-[5px]" style={{ paddingTop: "17px" }}>
+            {["", "M", "", "W", "", "F", ""].map((lbl, i) => (
+              <div key={i} className="h-[10px] flex items-center justify-end">
+                <span className="text-[7px] text-stone-300 dark:text-stone-600 leading-none">
+                  {lbl}
+                </span>
               </div>
-            </div>
-          ))}
-
-          {/* Current month — full opacity with labels */}
-          <div className="flex-shrink-0">
-            <div className="flex gap-0">
-              {/* Day labels (M W F) */}
-              <div className="flex flex-col gap-[2px] mr-[4px]" style={{ paddingTop: "17px" }}>
-                {["", "M", "", "W", "", "F", ""].map((lbl, i) => (
-                  <div key={i} className="h-[10px] flex items-center justify-end">
-                    <span className="text-[7px] text-stone-300 dark:text-stone-600 leading-none">
-                      {lbl}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              <div>
-                {/* DoW header */}
-                <div className="flex gap-[2px] mb-[3px] h-[14px]">
-                  {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-                    <div key={i} className="w-[10px] flex items-center justify-center">
-                      <span className="text-[6px] text-stone-200 dark:text-stone-700 leading-none">{d}</span>
-                    </div>
-                  ))}
-                </div>
-                {/* Cells */}
-                <div className="flex flex-col gap-[2px]">
-                  {weeks.map((week, wi) => (
-                    <div key={wi} className="flex gap-[2px]">
-                      {week.map((cell, di) => {
-                        const lvl = !cell.inMonth || cell.future
-                          ? -1
-                          : cell.count === 0 ? 0 : cell.count === 1 ? 1 : cell.count <= 3 ? 2 : 3;
-                        return (
-                          <div
-                            key={di}
-                            title={
-                              !cell.inMonth || cell.future ? ""
-                              : cell.count > 0
-                              ? `${cell.dateStr}: ${cell.count} post${cell.count !== 1 ? "s" : ""}`
-                              : cell.dateStr
-                            }
-                            className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-300 ${
-                              lvl === -1 ? "bg-stone-50 dark:bg-stone-900/40"
-                              : lvl === 0 ? "bg-stone-100 dark:bg-stone-800"
-                              : lvl === 1 ? "bg-stone-300 dark:bg-stone-600"
-                              : lvl === 2 ? "bg-stone-500 dark:bg-stone-400"
-                              : "bg-stone-700 dark:bg-stone-200"
-                            }`}
-                          />
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* Next months (next-1, next-2) */}
-          {(
-            [
-              { monthWeeks: nextWeeks,  opacity: isCurrentMonth ? "opacity-[0.08]" : "opacity-[0.28]" },
-              { monthWeeks: nextWeeks2, opacity: isCurrentMonth ? "opacity-[0.04]" : "opacity-[0.12]" },
-            ] as const
-          ).map(({ monthWeeks, opacity }, idx) => (
-            <div
-              key={idx}
-              className={`${opacity} flex-shrink-0 transition-opacity duration-300 ${!isCurrentMonth ? "cursor-pointer" : ""}`}
-              onClick={!isCurrentMonth ? goNext : undefined}
-            >
-              <div className="h-[17px]" />
-              <div className="flex flex-col gap-[2px]">
-                {monthWeeks.map((week, wi) => (
-                  <div key={wi} className="flex gap-[2px]">
-                    {week.map((cell, di) => {
-                      const lvl = !cell.inMonth
-                        ? -1
-                        : cell.count === 0 ? 0 : cell.count === 1 ? 1 : cell.count <= 3 ? 2 : 3;
-                      return (
-                        <div
-                          key={di}
-                          className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-300 ${
-                            lvl === -1 ? "bg-transparent"
-                            : lvl === 0 ? "bg-stone-100 dark:bg-stone-800"
-                            : lvl === 1 ? "bg-stone-300 dark:bg-stone-600"
-                            : lvl === 2 ? "bg-stone-500 dark:bg-stone-400"
-                            : "bg-stone-700 dark:bg-stone-200"
-                          }`}
-                        />
-                      );
-                    })}
-                  </div>
-                ))}
-              </div>
+          {/* Week columns */}
+          <div className="flex-1 min-w-0">
+            {/* Month labels */}
+            <div className="relative h-[14px] mb-[3px]">
+              {monthLabels.map(({ label, weekIdx }) => (
+                <span
+                  key={weekIdx}
+                  className="absolute text-[7px] text-stone-300 dark:text-stone-600 whitespace-nowrap leading-none top-0 transition-colors duration-300"
+                  style={{ left: weekIdx * 12 }}
+                >
+                  {label}
+                </span>
+              ))}
             </div>
-          ))}
+
+            {/* Cell rows: one row per day of week */}
+            <div className="flex flex-col gap-[2px]">
+              {[0, 1, 2, 3, 4, 5, 6].map((dayIdx) => (
+                <div key={dayIdx} className="flex gap-[2px]">
+                  {visibleSlice.map((week, wi) => {
+                    const cell = week[dayIdx];
+                    const lvl = cell.future
+                      ? -1
+                      : cell.count === 0
+                      ? 0
+                      : cell.count === 1
+                      ? 1
+                      : cell.count <= 3
+                      ? 2
+                      : 3;
+                    return (
+                      <div
+                        key={wi}
+                        title={
+                          cell.future
+                            ? ""
+                            : cell.count > 0
+                            ? `${cell.dateStr}: ${cell.count} post${cell.count !== 1 ? "s" : ""}`
+                            : cell.dateStr
+                        }
+                        className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-300 ${
+                          lvl === -1
+                            ? "bg-stone-50 dark:bg-stone-900/40"
+                            : lvl === 0
+                            ? "bg-stone-100 dark:bg-stone-800"
+                            : lvl === 1
+                            ? "bg-stone-300 dark:bg-stone-600"
+                            : lvl === 2
+                            ? "bg-stone-500 dark:bg-stone-400"
+                            : "bg-stone-700 dark:bg-stone-200"
+                        }`}
+                      />
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
