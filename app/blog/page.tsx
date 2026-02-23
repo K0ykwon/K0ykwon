@@ -110,7 +110,24 @@ function BlogContent() {
   const monthLabel = new Date(viewDate.year, viewDate.month, 1)
     .toLocaleDateString("en-US", { month: "short", year: "numeric" });
 
-  const weeks = getMonthGrid(posts, viewDate.year, viewDate.month);
+  const shiftMonth = (base: { year: number; month: number }, delta: number) => {
+    let m = base.month + delta;
+    let y = base.year;
+    while (m < 0) { m += 12; y--; }
+    while (m > 11) { m -= 12; y++; }
+    return { year: y, month: m };
+  };
+
+  const pm2 = shiftMonth(viewDate, -2);
+  const pm1 = shiftMonth(viewDate, -1);
+  const nm1 = shiftMonth(viewDate, +1);
+  const nm2 = shiftMonth(viewDate, +2);
+
+  const prevWeeks2 = getMonthGrid(posts, pm2.year, pm2.month);
+  const prevWeeks  = getMonthGrid(posts, pm1.year, pm1.month);
+  const weeks      = getMonthGrid(posts, viewDate.year, viewDate.month);
+  const nextWeeks  = getMonthGrid(posts, nm1.year, nm1.month);
+  const nextWeeks2 = getMonthGrid(posts, nm2.year, nm2.month);
 
   const goPrev = () =>
     setViewDate(({ year, month }) =>
@@ -151,98 +168,165 @@ function BlogContent() {
 
       {/* Activity Graph */}
       <section className="mb-14 animate-fade-up-delay-1">
-        {/* Header row: label + nav */}
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-[9px] tracking-[0.3em] uppercase text-stone-300 dark:text-stone-600 transition-colors duration-300">
-            Activity
-          </p>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={goPrev}
-              className="text-[9px] text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 transition-colors duration-200 cursor-pointer leading-none"
-            >
-              ←
-            </button>
-            <span className="text-[9px] tracking-[0.15em] uppercase text-stone-400 dark:text-stone-500 w-[4.5rem] text-center transition-colors duration-300">
-              {monthLabel}
-            </span>
-            <button
-              onClick={goNext}
-              disabled={isCurrentMonth}
-              className="text-[9px] text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 transition-colors duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-default leading-none"
-            >
-              →
-            </button>
-          </div>
+        {/* Activity label */}
+        <p className="text-[9px] tracking-[0.3em] uppercase text-stone-300 dark:text-stone-600 mb-3 transition-colors duration-300">
+          Activity
+        </p>
+        {/* Navigation — centered */}
+        <div className="flex items-center justify-center gap-3 mb-5">
+          <button
+            onClick={goPrev}
+            className="text-[9px] text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 transition-colors duration-200 cursor-pointer leading-none"
+          >
+            ←
+          </button>
+          <span className="text-[9px] tracking-[0.15em] uppercase text-stone-400 dark:text-stone-500 w-[4.5rem] text-center transition-colors duration-300">
+            {monthLabel}
+          </span>
+          <button
+            onClick={goNext}
+            disabled={isCurrentMonth}
+            className="text-[9px] text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 transition-colors duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-default leading-none"
+          >
+            →
+          </button>
         </div>
 
-        {/* Grid */}
-        <div className="flex gap-0">
-          {/* Day labels */}
-          <div className="flex flex-col gap-[2px] mr-[5px]" style={{ paddingTop: "17px" }}>
-            {["", "M", "", "W", "", "F", ""].map((lbl, i) => (
-              <div key={i} className="h-[10px] flex items-center justify-end">
-                <span className="text-[7px] text-stone-300 dark:text-stone-600 leading-none">
-                  {lbl}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div>
-            {/* Day-of-week header (S M T W T F S) */}
-            <div className="flex gap-[2px] mb-[3px] h-[14px]">
-              {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-                <div key={i} className="w-[10px] flex items-center justify-center">
-                  <span className="text-[6px] text-stone-200 dark:text-stone-700 leading-none">
-                    {d}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Cells: rows = weeks, cols = days */}
-            <div className="flex flex-col gap-[2px]">
-              {weeks.map((week, wi) => (
-                <div key={wi} className="flex gap-[2px]">
-                  {week.map((cell, di) => {
-                    const level = !cell.inMonth || cell.future
-                      ? -1
-                      : cell.count === 0
-                      ? 0
-                      : cell.count === 1
-                      ? 1
-                      : cell.count <= 3
-                      ? 2
-                      : 3;
-                    return (
-                      <div
-                        key={di}
-                        title={
-                          !cell.inMonth || cell.future
-                            ? ""
-                            : cell.count > 0
-                            ? `${cell.dateStr}: ${cell.count} post${cell.count !== 1 ? "s" : ""}`
-                            : cell.dateStr
-                        }
-                        className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-300 ${
-                          level === -1
-                            ? "bg-stone-50 dark:bg-stone-900/40"
-                            : level === 0
-                            ? "bg-stone-100 dark:bg-stone-800"
-                            : level === 1
-                            ? "bg-stone-300 dark:bg-stone-600"
-                            : level === 2
-                            ? "bg-stone-500 dark:bg-stone-400"
+        {/* 5-month carousel — justify-between to fill width */}
+        <div className="flex items-start justify-between">
+          {/* Helper: side grid (cells only, no labels) */}
+          {(
+            [
+              { monthWeeks: prevWeeks2, opacity: "opacity-[0.12]", onClick: goPrev },
+              { monthWeeks: prevWeeks,  opacity: "opacity-[0.28]", onClick: goPrev },
+            ] as const
+          ).map(({ monthWeeks, opacity, onClick }, idx) => (
+            <div
+              key={idx}
+              className={`${opacity} flex-shrink-0 cursor-pointer transition-opacity duration-300`}
+              onClick={onClick}
+            >
+              <div className="h-[17px]" />
+              <div className="flex flex-col gap-[2px]">
+                {monthWeeks.map((week, wi) => (
+                  <div key={wi} className="flex gap-[2px]">
+                    {week.map((cell, di) => {
+                      const lvl = !cell.inMonth
+                        ? -1
+                        : cell.count === 0 ? 0 : cell.count === 1 ? 1 : cell.count <= 3 ? 2 : 3;
+                      return (
+                        <div
+                          key={di}
+                          className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-300 ${
+                            lvl === -1 ? "bg-transparent"
+                            : lvl === 0 ? "bg-stone-100 dark:bg-stone-800"
+                            : lvl === 1 ? "bg-stone-300 dark:bg-stone-600"
+                            : lvl === 2 ? "bg-stone-500 dark:bg-stone-400"
                             : "bg-stone-700 dark:bg-stone-200"
-                        }`}
-                      />
-                    );
-                  })}
+                          }`}
+                        />
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {/* Current month — full opacity with labels */}
+          <div className="flex-shrink-0">
+            <div className="flex gap-0">
+              {/* Day labels (M W F) */}
+              <div className="flex flex-col gap-[2px] mr-[4px]" style={{ paddingTop: "17px" }}>
+                {["", "M", "", "W", "", "F", ""].map((lbl, i) => (
+                  <div key={i} className="h-[10px] flex items-center justify-end">
+                    <span className="text-[7px] text-stone-300 dark:text-stone-600 leading-none">
+                      {lbl}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div>
+                {/* DoW header */}
+                <div className="flex gap-[2px] mb-[3px] h-[14px]">
+                  {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
+                    <div key={i} className="w-[10px] flex items-center justify-center">
+                      <span className="text-[6px] text-stone-200 dark:text-stone-700 leading-none">{d}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+                {/* Cells */}
+                <div className="flex flex-col gap-[2px]">
+                  {weeks.map((week, wi) => (
+                    <div key={wi} className="flex gap-[2px]">
+                      {week.map((cell, di) => {
+                        const lvl = !cell.inMonth || cell.future
+                          ? -1
+                          : cell.count === 0 ? 0 : cell.count === 1 ? 1 : cell.count <= 3 ? 2 : 3;
+                        return (
+                          <div
+                            key={di}
+                            title={
+                              !cell.inMonth || cell.future ? ""
+                              : cell.count > 0
+                              ? `${cell.dateStr}: ${cell.count} post${cell.count !== 1 ? "s" : ""}`
+                              : cell.dateStr
+                            }
+                            className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-300 ${
+                              lvl === -1 ? "bg-stone-50 dark:bg-stone-900/40"
+                              : lvl === 0 ? "bg-stone-100 dark:bg-stone-800"
+                              : lvl === 1 ? "bg-stone-300 dark:bg-stone-600"
+                              : lvl === 2 ? "bg-stone-500 dark:bg-stone-400"
+                              : "bg-stone-700 dark:bg-stone-200"
+                            }`}
+                          />
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
+
+          {/* Next months (next-1, next-2) */}
+          {(
+            [
+              { monthWeeks: nextWeeks,  opacity: isCurrentMonth ? "opacity-[0.08]" : "opacity-[0.28]" },
+              { monthWeeks: nextWeeks2, opacity: isCurrentMonth ? "opacity-[0.04]" : "opacity-[0.12]" },
+            ] as const
+          ).map(({ monthWeeks, opacity }, idx) => (
+            <div
+              key={idx}
+              className={`${opacity} flex-shrink-0 transition-opacity duration-300 ${!isCurrentMonth ? "cursor-pointer" : ""}`}
+              onClick={!isCurrentMonth ? goNext : undefined}
+            >
+              <div className="h-[17px]" />
+              <div className="flex flex-col gap-[2px]">
+                {monthWeeks.map((week, wi) => (
+                  <div key={wi} className="flex gap-[2px]">
+                    {week.map((cell, di) => {
+                      const lvl = !cell.inMonth
+                        ? -1
+                        : cell.count === 0 ? 0 : cell.count === 1 ? 1 : cell.count <= 3 ? 2 : 3;
+                      return (
+                        <div
+                          key={di}
+                          className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-300 ${
+                            lvl === -1 ? "bg-transparent"
+                            : lvl === 0 ? "bg-stone-100 dark:bg-stone-800"
+                            : lvl === 1 ? "bg-stone-300 dark:bg-stone-600"
+                            : lvl === 2 ? "bg-stone-500 dark:bg-stone-400"
+                            : "bg-stone-700 dark:bg-stone-200"
+                          }`}
+                        />
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
