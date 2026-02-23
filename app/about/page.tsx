@@ -1,6 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import Link from "next/link";
+import Image from "next/image";
 import ThemeToggle from "../components/ThemeToggle";
 import { createSupabaseClient, type Timeline } from "@/lib/supabase";
 import type { Metadata } from "next";
@@ -82,6 +83,17 @@ export default async function AboutPage() {
           <p className="mt-2 text-[10px] tracking-[0.3em] uppercase text-stone-400 dark:text-stone-500 transition-colors duration-300">
             About Me
           </p>
+        </div>
+
+        <div className="mb-10">
+          <Image
+            src="/profile/image.png"
+            alt="Youngkwon Ko"
+            width={160}
+            height={160}
+            className="rounded-full object-cover"
+            priority
+          />
         </div>
 
         {/* Bio */}
