@@ -5,11 +5,11 @@ import { useState, useEffect, useRef } from "react";
 const navItems = [
   {
     label: "About",
-    href: "#about",
+    href: "/about",
     sub: [
-      { label: "Story", href: "#story" },
-      { label: "Stack", href: "#stack" },
-      { label: "Contact", href: "#contact" },
+      { label: "Story", href: "/about" },
+      { label: "Stack", href: "/about#stack" },
+      { label: "Contact", href: "/about#contact" },
     ],
     delay: "animate-fade-up-delay-3",
   },

@@ -1,5 +1,15 @@
 import { createClient } from "@supabase/supabase-js";
 
+export type Timeline = {
+  id: string;
+  start_date: string;
+  end_date: string;
+  title: string;
+  description: string;
+  sort_order: number;
+  created_at: string;
+};
+
 export type Post = {
   id: string;
   title: string;
@@ -10,18 +20,6 @@ export type Post = {
   published: boolean;
   created_at: string;
   updated_at: string;
-};
-
-type Database = {
-  public: {
-    Tables: {
-      posts: {
-        Row: Post;
-        Insert: Omit<Post, "id" | "created_at" | "updated_at">;
-        Update: Partial<Omit<Post, "id" | "created_at" | "updated_at">>;
-      };
-    };
-  };
 };
 
 /** Call this inside a function/handler — never at module level. */
