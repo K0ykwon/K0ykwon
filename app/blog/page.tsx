@@ -32,12 +32,9 @@ function toDateStr(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-type GridCell = { dateStr: string; count: number; future: boolean };
+type GridCell = { dateStr: string; count: number; future: boolean; inMonth: boolean };
 
-function getActivityGrid(posts: Post[]): {
-  weeks: GridCell[][];
-  months: { label: string; weekIndex: number }[];
-} {
+function getMonthGrid(posts: Post[], year: number, month: number): GridCell[][] {
   const counts: Record<string, number> = {};
   posts.forEach((p) => {
     const day = p.created_at.slice(0, 10);
@@ -48,41 +45,34 @@ function getActivityGrid(posts: Post[]): {
   today.setHours(0, 0, 0, 0);
   const todayStr = toDateStr(today);
 
-  const start = new Date(today);
-  start.setDate(start.getDate() - 364);
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+
+  const start = new Date(firstDay);
   start.setDate(start.getDate() - start.getDay()); // back to Sunday
 
-  const end = new Date(today);
+  const end = new Date(lastDay);
   end.setDate(end.getDate() + (6 - end.getDay())); // forward to Saturday
 
   const weeks: GridCell[][] = [];
-  const months: { label: string; weekIndex: number }[] = [];
   const cur = new Date(start);
-  let lastMonth = -1;
 
   while (cur <= end) {
     const week: GridCell[] = [];
     for (let d = 0; d < 7; d++) {
       const dateStr = toDateStr(cur);
-      week.push({ dateStr, count: counts[dateStr] ?? 0, future: dateStr > todayStr });
-      cur.setDate(cur.getDate() + 1);
-    }
-    const m = parseInt(week[0].dateStr.slice(5, 7));
-    if (m !== lastMonth) {
-      months.push({
-        label: new Date(
-          parseInt(week[0].dateStr.slice(0, 4)),
-          m - 1,
-          1
-        ).toLocaleDateString("en-US", { month: "short" }),
-        weekIndex: weeks.length,
+      week.push({
+        dateStr,
+        count: counts[dateStr] ?? 0,
+        future: dateStr > todayStr,
+        inMonth: cur.getMonth() === month && cur.getFullYear() === year,
       });
-      lastMonth = m;
+      cur.setDate(cur.getDate() + 1);
     }
     weeks.push(week);
   }
 
-  return { weeks, months };
+  return weeks;
 }
 
 function BlogContent() {
@@ -92,6 +82,10 @@ function BlogContent() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<Category>("all");
+  const [viewDate, setViewDate] = useState<{ year: number; month: number }>(() => {
+    const n = new Date();
+    return { year: n.getFullYear(), month: n.getMonth() };
+  });
 
   useEffect(() => {
     if (paramCat && categories.some((c) => c.id === paramCat)) {
@@ -111,7 +105,21 @@ function BlogContent() {
       });
   }, []);
 
-  const { weeks, months } = getActivityGrid(posts);
+  const now = new Date();
+  const isCurrentMonth = viewDate.year === now.getFullYear() && viewDate.month === now.getMonth();
+  const monthLabel = new Date(viewDate.year, viewDate.month, 1)
+    .toLocaleDateString("en-US", { month: "short", year: "numeric" });
+
+  const weeks = getMonthGrid(posts, viewDate.year, viewDate.month);
+
+  const goPrev = () =>
+    setViewDate(({ year, month }) =>
+      month === 0 ? { year: year - 1, month: 11 } : { year, month: month - 1 }
+    );
+  const goNext = () =>
+    setViewDate(({ year, month }) =>
+      month === 11 ? { year: year + 1, month: 0 } : { year, month: month + 1 }
+    );
 
   const recent = posts.slice(0, 3);
   const filtered = posts.filter(
@@ -143,80 +151,96 @@ function BlogContent() {
 
       {/* Activity Graph */}
       <section className="mb-14 animate-fade-up-delay-1">
-        <p className="text-[9px] tracking-[0.3em] uppercase text-stone-300 dark:text-stone-600 mb-4 transition-colors duration-300">
-          Activity
-        </p>
-        <div className="overflow-x-auto">
-          <div className="inline-flex gap-0">
-            {/* Day labels */}
-            <div className="flex flex-col gap-[2px] mr-[5px]" style={{ paddingTop: "17px" }}>
-              {["", "M", "", "W", "", "F", ""].map((lbl, i) => (
-                <div key={i} className="h-[10px] flex items-center justify-end">
-                  <span className="text-[7px] text-stone-300 dark:text-stone-600 leading-none">
-                    {lbl}
+        {/* Header row: label + nav */}
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-[9px] tracking-[0.3em] uppercase text-stone-300 dark:text-stone-600 transition-colors duration-300">
+            Activity
+          </p>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={goPrev}
+              className="text-[9px] text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 transition-colors duration-200 cursor-pointer leading-none"
+            >
+              ←
+            </button>
+            <span className="text-[9px] tracking-[0.15em] uppercase text-stone-400 dark:text-stone-500 w-[4.5rem] text-center transition-colors duration-300">
+              {monthLabel}
+            </span>
+            <button
+              onClick={goNext}
+              disabled={isCurrentMonth}
+              className="text-[9px] text-stone-300 dark:text-stone-600 hover:text-stone-500 dark:hover:text-stone-400 transition-colors duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-default leading-none"
+            >
+              →
+            </button>
+          </div>
+        </div>
+
+        {/* Grid */}
+        <div className="flex gap-0">
+          {/* Day labels */}
+          <div className="flex flex-col gap-[2px] mr-[5px]" style={{ paddingTop: "17px" }}>
+            {["", "M", "", "W", "", "F", ""].map((lbl, i) => (
+              <div key={i} className="h-[10px] flex items-center justify-end">
+                <span className="text-[7px] text-stone-300 dark:text-stone-600 leading-none">
+                  {lbl}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div>
+            {/* Day-of-week header (S M T W T F S) */}
+            <div className="flex gap-[2px] mb-[3px] h-[14px]">
+              {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
+                <div key={i} className="w-[10px] flex items-center justify-center">
+                  <span className="text-[6px] text-stone-200 dark:text-stone-700 leading-none">
+                    {d}
                   </span>
                 </div>
               ))}
             </div>
-            {/* Grid */}
-            <div>
-              {/* Month labels */}
-              <div className="flex gap-[2px] mb-[3px] h-[14px]">
-                {weeks.map((_, wi) => {
-                  const m = months.find((x) => x.weekIndex === wi);
-                  return (
-                    <div key={wi} className="w-[10px] relative">
-                      {m && (
-                        <span className="absolute text-[7px] text-stone-300 dark:text-stone-600 whitespace-nowrap leading-none">
-                          {m.label}
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-              {/* Cells */}
-              <div className="flex flex-col gap-[2px]">
-                {[0, 1, 2, 3, 4, 5, 6].map((dayIdx) => (
-                  <div key={dayIdx} className="flex gap-[2px]">
-                    {weeks.map((week, wi) => {
-                      const cell = week[dayIdx];
-                      const level = cell.future
-                        ? -1
-                        : cell.count === 0
-                        ? 0
-                        : cell.count === 1
-                        ? 1
-                        : cell.count <= 3
-                        ? 2
-                        : 3;
-                      return (
-                        <div
-                          key={wi}
-                          title={
-                            cell.future
-                              ? ""
-                              : cell.count > 0
-                              ? `${cell.dateStr}: ${cell.count} post${cell.count !== 1 ? "s" : ""}`
-                              : cell.dateStr
-                          }
-                          className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-300 ${
-                            level === -1
-                              ? "bg-transparent"
-                              : level === 0
-                              ? "bg-stone-100 dark:bg-stone-800"
-                              : level === 1
-                              ? "bg-stone-300 dark:bg-stone-600"
-                              : level === 2
-                              ? "bg-stone-500 dark:bg-stone-400"
-                              : "bg-stone-700 dark:bg-stone-200"
-                          }`}
-                        />
-                      );
-                    })}
-                  </div>
-                ))}
-              </div>
+
+            {/* Cells: rows = weeks, cols = days */}
+            <div className="flex flex-col gap-[2px]">
+              {weeks.map((week, wi) => (
+                <div key={wi} className="flex gap-[2px]">
+                  {week.map((cell, di) => {
+                    const level = !cell.inMonth || cell.future
+                      ? -1
+                      : cell.count === 0
+                      ? 0
+                      : cell.count === 1
+                      ? 1
+                      : cell.count <= 3
+                      ? 2
+                      : 3;
+                    return (
+                      <div
+                        key={di}
+                        title={
+                          !cell.inMonth || cell.future
+                            ? ""
+                            : cell.count > 0
+                            ? `${cell.dateStr}: ${cell.count} post${cell.count !== 1 ? "s" : ""}`
+                            : cell.dateStr
+                        }
+                        className={`w-[10px] h-[10px] rounded-[2px] transition-colors duration-300 ${
+                          level === -1
+                            ? "bg-stone-50 dark:bg-stone-900/40"
+                            : level === 0
+                            ? "bg-stone-100 dark:bg-stone-800"
+                            : level === 1
+                            ? "bg-stone-300 dark:bg-stone-600"
+                            : level === 2
+                            ? "bg-stone-500 dark:bg-stone-400"
+                            : "bg-stone-700 dark:bg-stone-200"
+                        }`}
+                      />
+                    );
+                  })}
+                </div>
+              ))}
             </div>
           </div>
         </div>
