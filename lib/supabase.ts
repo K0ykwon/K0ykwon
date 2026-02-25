@@ -24,7 +24,6 @@ type Database = {
   };
 };
 
-
 /** Call this inside a function/handler — never at module level. */
 export function createSupabaseClient() {
   // No Database generic: query results typed as `any`, avoids TypeScript
