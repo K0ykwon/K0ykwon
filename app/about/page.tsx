@@ -7,7 +7,7 @@ import { createSupabaseClient, type Timeline } from "@/lib/supabase";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About — Youngkwon Ko",
+  title: "About",
   description: "AI developer and researcher at Yonsei University.",
 };
 

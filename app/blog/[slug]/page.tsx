@@ -33,7 +33,7 @@ export async function generateMetadata({
       .eq("slug", slug)
       .single();
     return {
-      title: data?.title ?? "Blog Post",
+      title: data?.title ?? "Blog",
       description: data?.description ?? "",
     };
   } catch {
