@@ -44,14 +44,3 @@ $$ language plpgsql;
 create trigger posts_updated_at
   before update on public.posts
   for each row execute function update_updated_at();
-
--- Timeline table
-create table if not exists public.timeline (
-  id          uuid        default gen_random_uuid() primary key,
-  year        text        not null,
-  title       text        not null,
-  description text        not null default '',
-  sort_order  integer     not null default 0,
-  created_at  timestamptz not null default now()
-);
-
