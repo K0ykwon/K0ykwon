@@ -451,18 +451,7 @@ function TimelineEditor({
           />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">
-            Order (낮을수록 위에 표시)
-          </label>
-          <input
-            type="number"
-            value={form.sort_order}
-            onChange={(e) => set("sort_order", parseInt(e.target.value) || 0)}
-            className={inputClass}
-            placeholder="0"
-          />
-        </div>
+
       </div>
     </div>
   );
@@ -495,6 +484,28 @@ function AdminPanel({
 }) {
   const [deletingPost, setDeletingPost] = useState<string | null>(null);
   const [deletingTimeline, setDeletingTimeline] = useState<string | null>(null);
+  const [dragId, setDragId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
+  const [reordering, setReordering] = useState(false);
+
+  const handleReorder = async (targetId: string) => {
+    if (!dragId || dragId === targetId) return;
+    const fromIndex = timeline.findIndex((t) => t.id === dragId);
+    const toIndex = timeline.findIndex((t) => t.id === targetId);
+    if (fromIndex === -1 || toIndex === -1) return;
+    const reordered = [...timeline];
+    const [moved] = reordered.splice(fromIndex, 1);
+    reordered.splice(toIndex, 0, moved);
+    setReordering(true);
+    const supabase = createSupabaseClient();
+    await Promise.all(
+      reordered.map((item, index) =>
+        supabase.from("timeline").update({ sort_order: index }).eq("id", item.id)
+      )
+    );
+    setReordering(false);
+    onRefreshTimeline();
+  };
 
   const handleDeletePost = async (id: string, title: string) => {
     if (!confirm(`Delete "${title}"?`)) return;
@@ -652,13 +663,43 @@ function AdminPanel({
           ) : (
             <ul className="divide-y divide-stone-100 dark:divide-stone-800/60">
               {timeline.map((item) => (
-                <li key={item.id} className="py-6 flex items-start justify-between gap-4">
-                  <div className="min-w-0">
+                <li
+                  key={item.id}
+                  draggable
+                  onDragStart={(e) => {
+                    e.dataTransfer.effectAllowed = "move";
+                    setDragId(item.id);
+                  }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = "move";
+                    if (dragOverId !== item.id) setDragOverId(item.id);
+                  }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    handleReorder(item.id);
+                    setDragId(null);
+                    setDragOverId(null);
+                  }}
+                  onDragEnd={() => {
+                    setDragId(null);
+                    setDragOverId(null);
+                  }}
+                  className={`py-6 flex items-start justify-between gap-3 transition-all duration-100 ${
+                    dragId === item.id ? "opacity-40" : ""
+                  } ${
+                    dragOverId === item.id && dragId !== item.id
+                      ? "bg-stone-50/80 dark:bg-stone-800/30"
+                      : ""
+                  }`}
+                >
+                  {/* Drag handle */}
+                  <div className={`mt-1 shrink-0 select-none text-sm leading-none transition-colors duration-200 ${reordering ? "cursor-wait" : "cursor-grab"} text-stone-200 dark:text-stone-700 hover:text-stone-400 dark:hover:text-stone-500`}>
+                    ⠿
+                  </div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-[9px] tracking-[0.2em] uppercase text-stone-300 dark:text-stone-600 mb-1.5 transition-colors duration-300">
                       {item.start_date} — {item.end_date}
-                      <span className="ml-3 text-stone-200 dark:text-stone-700">
-                        order {item.sort_order}
-                      </span>
                     </p>
                     <p className="text-sm font-light tracking-wide text-stone-700 dark:text-stone-300 transition-colors duration-300">
                       {item.title}
