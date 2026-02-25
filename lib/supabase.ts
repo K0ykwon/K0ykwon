@@ -24,6 +24,15 @@ type Database = {
   };
 };
 
+export type Timeline = {
+  id: string;
+  year: string;
+  title: string;
+  description: string;
+  sort_order: number;
+  created_at: string;
+};
+
 /** Call this inside a function/handler — never at module level. */
 export function createSupabaseClient() {
   // No Database generic: query results typed as `any`, avoids TypeScript

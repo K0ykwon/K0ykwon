@@ -44,3 +44,20 @@ $$ language plpgsql;
 create trigger posts_updated_at
   before update on public.posts
   for each row execute function update_updated_at();
+
+-- Timeline table
+create table if not exists public.timeline (
+  id          uuid        default gen_random_uuid() primary key,
+  year        text        not null,
+  title       text        not null,
+  description text        not null default '',
+  sort_order  integer     not null default 0,
+  created_at  timestamptz not null default now()
+);
+
+alter table public.timeline enable row level security;
+
+create policy "Allow read"   on public.timeline for select using (true);
+create policy "Allow insert" on public.timeline for insert with check (true);
+create policy "Allow update" on public.timeline for update using (true) with check (true);
+create policy "Allow delete" on public.timeline for delete using (true);
