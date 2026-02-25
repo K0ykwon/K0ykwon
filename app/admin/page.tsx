@@ -487,6 +487,8 @@ function AdminPanel({
   const [dragId, setDragId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>(null);
   const [reordering, setReordering] = useState(false);
+  // Refs for touch drag (avoids stale closure issues with React state)
+  const touchRef = useRef<{ dragId: string | null; dragOverId: string | null }>({ dragId: null, dragOverId: null });
 
   const handleReorder = async (targetId: string) => {
     if (!dragId || dragId === targetId) return;
@@ -665,6 +667,7 @@ function AdminPanel({
               {timeline.map((item) => (
                 <li
                   key={item.id}
+                  data-timeline-id={item.id}
                   draggable
                   onDragStart={(e) => {
                     e.dataTransfer.effectAllowed = "move";
@@ -693,8 +696,39 @@ function AdminPanel({
                       : ""
                   }`}
                 >
-                  {/* Drag handle */}
-                  <div className={`mt-1 shrink-0 select-none text-sm leading-none transition-colors duration-200 ${reordering ? "cursor-wait" : "cursor-grab"} text-stone-200 dark:text-stone-700 hover:text-stone-400 dark:hover:text-stone-500`}>
+                  {/* Drag handle — desktop: mouse drag / mobile: touch drag */}
+                  <div
+                    style={{ touchAction: "none" }}
+                    className={`mt-1 shrink-0 select-none text-sm leading-none transition-colors duration-200 ${reordering ? "cursor-wait" : "cursor-grab"} text-stone-200 dark:text-stone-700 hover:text-stone-400 dark:hover:text-stone-500`}
+                    onTouchStart={() => {
+                      touchRef.current.dragId = item.id;
+                      touchRef.current.dragOverId = null;
+                      setDragId(item.id);
+                    }}
+                    onTouchMove={(e) => {
+                      if (!touchRef.current.dragId) return;
+                      const touch = e.touches[0];
+                      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+                      const liEl = el?.closest("[data-timeline-id]") as HTMLElement | null;
+                      if (liEl) {
+                        const overId = liEl.dataset.timelineId ?? null;
+                        if (overId && overId !== touchRef.current.dragId) {
+                          touchRef.current.dragOverId = overId;
+                          setDragOverId(overId);
+                        }
+                      }
+                    }}
+                    onTouchEnd={() => {
+                      const { dragId: fromId, dragOverId: toId } = touchRef.current;
+                      if (fromId && toId && fromId !== toId) {
+                        handleReorder(toId);
+                      }
+                      touchRef.current.dragId = null;
+                      touchRef.current.dragOverId = null;
+                      setDragId(null);
+                      setDragOverId(null);
+                    }}
+                  >
                     ⠿
                   </div>
                   <div className="min-w-0 flex-1">
