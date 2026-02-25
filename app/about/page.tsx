@@ -112,55 +112,30 @@ export default async function AboutPage() {
           ))}
         </div>
 
-        {/* Timeline — mobile: horizontal swipe / desktop: vertical */}
+        {/* Timeline */}
         {timeline.length > 0 && (
-          <>
-            {/* Mobile horizontal scroll */}
-            <div className="md:hidden -mx-8 px-8 overflow-x-auto snap-x snap-mandatory flex gap-6 pb-4 touch-pan-x">
-              {timeline.map((item) => (
-                <div
-                  key={item.id}
-                  className="snap-start shrink-0 w-52 border-l border-stone-100 dark:border-stone-800/80 pl-4 transition-colors duration-300"
-                >
-                  <p className="text-[9px] tracking-[0.2em] uppercase text-stone-300 dark:text-stone-600 mb-1.5 transition-colors duration-300">
-                    {item.start_date} — {item.end_date}
+          <div className="relative pl-5 border-l border-stone-100 dark:border-stone-800/80 flex flex-col gap-10 transition-colors duration-300">
+            {timeline.map((item) => (
+              <div key={item.id} className="relative">
+                {/* dot */}
+                <div className="absolute -left-[21px] top-[5px] w-2 h-2 rounded-full bg-stone-200 dark:bg-stone-700 transition-colors duration-300" />
+                {/* date range */}
+                <p className="text-[9px] tracking-[0.2em] uppercase text-stone-300 dark:text-stone-600 mb-1.5 transition-colors duration-300">
+                  {item.start_date} — {item.end_date}
+                </p>
+                {/* title */}
+                <p className="text-sm font-light tracking-wide text-stone-700 dark:text-stone-300 mb-1 transition-colors duration-300">
+                  {item.title}
+                </p>
+                {/* description */}
+                {item.description && (
+                  <p className="text-[11px] leading-relaxed tracking-wide text-stone-400 dark:text-stone-500 transition-colors duration-300">
+                    {item.description}
                   </p>
-                  <p className="text-sm font-light tracking-wide text-stone-700 dark:text-stone-300 mb-1 transition-colors duration-300">
-                    {item.title}
-                  </p>
-                  {item.description && (
-                    <p className="text-[11px] leading-relaxed tracking-wide text-stone-400 dark:text-stone-500 transition-colors duration-300">
-                      {item.description}
-                    </p>
-                  )}
-                </div>
-              ))}
-              {/* trailing padding so last card isn't flush */}
-              <div className="shrink-0 w-4" />
-            </div>
-
-            {/* Desktop vertical */}
-            <div className="hidden md:block relative pl-5 border-l border-stone-100 dark:border-stone-800/80 transition-colors duration-300">
-              <div className="flex flex-col gap-10">
-                {timeline.map((item) => (
-                  <div key={item.id} className="relative">
-                    <div className="absolute -left-[21px] top-[5px] w-2 h-2 rounded-full bg-stone-200 dark:bg-stone-700 transition-colors duration-300" />
-                    <p className="text-[9px] tracking-[0.2em] uppercase text-stone-300 dark:text-stone-600 mb-1.5 transition-colors duration-300">
-                      {item.start_date} — {item.end_date}
-                    </p>
-                    <p className="text-sm font-light tracking-wide text-stone-700 dark:text-stone-300 mb-1 transition-colors duration-300">
-                      {item.title}
-                    </p>
-                    {item.description && (
-                      <p className="text-[11px] leading-relaxed tracking-wide text-stone-400 dark:text-stone-500 transition-colors duration-300">
-                        {item.description}
-                      </p>
-                    )}
-                  </div>
-                ))}
+                )}
               </div>
-            </div>
-          </>
+            ))}
+          </div>
         )}
       </section>
 
