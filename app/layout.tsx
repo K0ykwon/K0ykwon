@@ -14,7 +14,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://k0ykwon.vercel.app"),
-  title: "Tomato Chipp",
+  title: {
+    default: "Tomato Chipp",
+    template: "%s | Tomato Chipp",
+  },
   description: "Personal page of Youngkwon Ko",
   openGraph: {
     siteName: "Tomato Chipp",

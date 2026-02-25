@@ -3,7 +3,7 @@ import ThemeToggle from "../components/ThemeToggle";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Sitemap — Youngkwon Ko",
+  title: "Sitemap",
   description: "A complete overview of all pages on this site.",
 };
 
