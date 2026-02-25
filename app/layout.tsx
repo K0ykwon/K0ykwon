@@ -13,8 +13,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://k0ykwon.vercel.app"),
   title: "Tomato Chipp",
   description: "Personal page of Youngkwon Ko",
+  openGraph: {
+    siteName: "Tomato Chipp",
+    title: "Tomato Chipp",
+    description: "Personal page of Youngkwon Ko",
+    url: "https://k0ykwon.vercel.app",
+  },
 };
 
 export default function RootLayout({
