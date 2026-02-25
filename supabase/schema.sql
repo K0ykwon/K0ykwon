@@ -55,9 +55,3 @@ create table if not exists public.timeline (
   created_at  timestamptz not null default now()
 );
 
-alter table public.timeline enable row level security;
-
-create policy "Allow read"   on public.timeline for select using (true);
-create policy "Allow insert" on public.timeline for insert with check (true);
-create policy "Allow update" on public.timeline for update using (true) with check (true);
-create policy "Allow delete" on public.timeline for delete using (true);
