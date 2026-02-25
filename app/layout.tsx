@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Youngkwon Ko",
+  title: "Tomato Chipp",
   description: "Personal page of Youngkwon Ko",
 };
 
