@@ -14,9 +14,9 @@ function PortfolioCard({ item }: { item: PortfolioItem }) {
           : ""
       }`}
     >
-      {/* Date */}
+      {/* Date range */}
       <time className="text-[9px] tracking-[0.25em] uppercase text-stone-300 dark:text-stone-600 transition-colors duration-300">
-        {item.date}
+        {item.start_date}{item.end_date ? ` — ${item.end_date}` : ""}
       </time>
 
       {/* Title */}
@@ -71,9 +71,15 @@ export default function ProjectsPage() {
         .from("portfolio_items")
         .select("*")
         .eq("type", "project")
-        .eq("published", true)
-        .order("sort_order", { ascending: true });
-      setItems((data as PortfolioItem[]) ?? []);
+        .eq("published", true);
+      const raw = (data as PortfolioItem[]) ?? [];
+      const sorted = [...raw].sort((a, b) => {
+        const toKey = (d: string) => (d === "Present" ? "9999.99" : d);
+        const endCmp = toKey(b.end_date).localeCompare(toKey(a.end_date));
+        if (endCmp !== 0) return endCmp;
+        return toKey(b.start_date).localeCompare(toKey(a.start_date));
+      });
+      setItems(sorted);
       setLoading(false);
     };
     fetchItems();

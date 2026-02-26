@@ -50,7 +50,8 @@ type PortfolioFormData = {
   title: string;
   description: string;
   tags: string; // comma-separated input
-  date: string;
+  start_date: string;
+  end_date: string;
   link: string;
   type: "project" | "paper";
   published: boolean;
@@ -61,7 +62,8 @@ const emptyPortfolioForm: PortfolioFormData = {
   title: "",
   description: "",
   tags: "",
-  date: "",
+  start_date: "",
+  end_date: "Present",
   link: "",
   type: "project",
   published: true,
@@ -513,7 +515,8 @@ function PortfolioEditor({
       title: form.title.trim(),
       description: form.description.trim(),
       tags,
-      date: form.date.trim(),
+      start_date: form.start_date.trim(),
+      end_date: form.end_date.trim(),
       link: form.link.trim(),
       type: form.type,
       published: form.published,
@@ -566,26 +569,37 @@ function PortfolioEditor({
           />
         </div>
 
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">Type</label>
+          <select
+            value={form.type}
+            onChange={(e) => set("type", e.target.value as "project" | "paper")}
+            className="bg-transparent border-b border-stone-200 dark:border-stone-700/60 py-2 text-sm font-light text-stone-700 dark:text-stone-300 outline-none focus:border-stone-400 dark:focus:border-stone-500 transition-colors duration-200 cursor-pointer"
+          >
+            <option value="project">Project</option>
+            <option value="paper">Paper</option>
+          </select>
+        </div>
+
         <div className="grid grid-cols-2 gap-6">
           <div className="flex flex-col gap-1.5">
-            <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">Type</label>
-            <select
-              value={form.type}
-              onChange={(e) => set("type", e.target.value as "project" | "paper")}
-              className="bg-transparent border-b border-stone-200 dark:border-stone-700/60 py-2 text-sm font-light text-stone-700 dark:text-stone-300 outline-none focus:border-stone-400 dark:focus:border-stone-500 transition-colors duration-200 cursor-pointer"
-            >
-              <option value="project">Project</option>
-              <option value="paper">Paper</option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">Date</label>
+            <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">Start Date</label>
             <input
               type="text"
-              value={form.date}
-              onChange={(e) => set("date", e.target.value)}
+              value={form.start_date}
+              onChange={(e) => set("start_date", e.target.value)}
               className={inputClass}
               placeholder="2024.03"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">End Date</label>
+            <input
+              type="text"
+              value={form.end_date}
+              onChange={(e) => set("end_date", e.target.value)}
+              className={inputClass}
+              placeholder="Present"
             />
           </div>
         </div>
@@ -869,9 +883,9 @@ function AdminPanel({
                 <li key={item.id} className="py-6 flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-3 mb-1.5 flex-wrap">
-                      {item.date && (
+                      {(item.start_date || item.end_date) && (
                         <span className="text-[9px] tracking-[0.2em] uppercase text-stone-300 dark:text-stone-600 transition-colors duration-300">
-                          {item.date}
+                          {item.start_date}{item.end_date ? ` — ${item.end_date}` : ""}
                         </span>
                       )}
                       <span className="text-[8px] tracking-[0.15em] uppercase text-stone-400 dark:text-stone-500 border border-stone-200 dark:border-stone-700/80 px-1.5 py-0.5 transition-colors duration-300">
@@ -1182,7 +1196,7 @@ export default function AdminPage() {
     const it = portfolioEditor.item;
     return (
       <PortfolioEditor
-        initial={{ id: it.id, title: it.title, description: it.description, tags: it.tags.join(", "), date: it.date, link: it.link, type: it.type, published: it.published, sort_order: it.sort_order }}
+        initial={{ id: it.id, title: it.title, description: it.description, tags: it.tags.join(", "), start_date: it.start_date, end_date: it.end_date, link: it.link, type: it.type, published: it.published, sort_order: it.sort_order }}
         onSave={() => { setPortfolioEditor({ mode: "none" }); fetchPortfolio(); }}
         onCancel={() => setPortfolioEditor({ mode: "none" })}
       />

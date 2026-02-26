@@ -27,7 +27,8 @@ export type PortfolioItem = {
   title: string;
   description: string;
   tags: string[];
-  date: string;
+  start_date: string;
+  end_date: string;
   link: string;
   type: "project" | "paper";
   published: boolean;

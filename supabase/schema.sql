@@ -1,4 +1,7 @@
 -- Run this in Supabase Dashboard > SQL Editor
+-- Safe to re-run: uses IF NOT EXISTS / OR REPLACE / DROP IF EXISTS
+
+-- ── Posts ─────────────────────────────────────────────────────────────────────
 
 create table if not exists public.posts (
   id          uuid        default gen_random_uuid() primary key,
@@ -14,23 +17,15 @@ create table if not exists public.posts (
 
 alter table public.posts enable row level security;
 
--- Anyone can read (filter published=true in app code)
-create policy "Allow read"
-  on public.posts for select
-  using (true);
+drop policy if exists "Allow read"   on public.posts;
+drop policy if exists "Allow insert" on public.posts;
+drop policy if exists "Allow update" on public.posts;
+drop policy if exists "Allow delete" on public.posts;
 
--- Allow all writes (app-level auth enforces security via /blog/admin)
-create policy "Allow insert"
-  on public.posts for insert
-  with check (true);
-
-create policy "Allow update"
-  on public.posts for update
-  using (true) with check (true);
-
-create policy "Allow delete"
-  on public.posts for delete
-  using (true);
+create policy "Allow read"   on public.posts for select using (true);
+create policy "Allow insert" on public.posts for insert with check (true);
+create policy "Allow update" on public.posts for update using (true) with check (true);
+create policy "Allow delete" on public.posts for delete using (true);
 
 -- Auto-update updated_at on row change
 create or replace function update_updated_at()
@@ -41,6 +36,7 @@ begin
 end;
 $$ language plpgsql;
 
+drop trigger if exists posts_updated_at on public.posts;
 create trigger posts_updated_at
   before update on public.posts
   for each row execute function update_updated_at();
@@ -59,6 +55,11 @@ create table if not exists public.timeline (
 
 alter table public.timeline enable row level security;
 
+drop policy if exists "timeline_read"   on public.timeline;
+drop policy if exists "timeline_insert" on public.timeline;
+drop policy if exists "timeline_update" on public.timeline;
+drop policy if exists "timeline_delete" on public.timeline;
+
 create policy "timeline_read"   on public.timeline for select using (true);
 create policy "timeline_insert" on public.timeline for insert with check (true);
 create policy "timeline_update" on public.timeline for update using (true) with check (true);
@@ -71,7 +72,8 @@ create table if not exists public.portfolio_items (
   title       text        not null,
   description text        not null default '',
   tags        text[]      not null default '{}',
-  date        text        not null default '',
+  start_date  text        not null default '',
+  end_date    text        not null default 'Present',
   link        text        not null default '',
   type        text        not null check (type in ('project', 'paper')),
   published   boolean     not null default true,
@@ -80,6 +82,11 @@ create table if not exists public.portfolio_items (
 );
 
 alter table public.portfolio_items enable row level security;
+
+drop policy if exists "portfolio_read"   on public.portfolio_items;
+drop policy if exists "portfolio_insert" on public.portfolio_items;
+drop policy if exists "portfolio_update" on public.portfolio_items;
+drop policy if exists "portfolio_delete" on public.portfolio_items;
 
 create policy "portfolio_read"   on public.portfolio_items for select using (true);
 create policy "portfolio_insert" on public.portfolio_items for insert with check (true);
