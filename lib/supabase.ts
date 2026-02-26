@@ -22,6 +22,19 @@ export type Post = {
   updated_at: string;
 };
 
+export type PortfolioItem = {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  date: string;
+  link: string;
+  type: "project" | "paper";
+  published: boolean;
+  sort_order: number;
+  created_at: string;
+};
+
 /** Call this inside a function/handler — never at module level. */
 export function createSupabaseClient() {
   // No Database generic: query results typed as `any`, avoids TypeScript

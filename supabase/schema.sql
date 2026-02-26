@@ -63,3 +63,25 @@ create policy "timeline_read"   on public.timeline for select using (true);
 create policy "timeline_insert" on public.timeline for insert with check (true);
 create policy "timeline_update" on public.timeline for update using (true) with check (true);
 create policy "timeline_delete" on public.timeline for delete using (true);
+
+-- ── Portfolio Items ────────────────────────────────────────────────────────────
+
+create table if not exists public.portfolio_items (
+  id          uuid        default gen_random_uuid() primary key,
+  title       text        not null,
+  description text        not null default '',
+  tags        text[]      not null default '{}',
+  date        text        not null default '',
+  link        text        not null default '',
+  type        text        not null check (type in ('project', 'paper')),
+  published   boolean     not null default true,
+  sort_order  integer     not null default 0,
+  created_at  timestamptz not null default now()
+);
+
+alter table public.portfolio_items enable row level security;
+
+create policy "portfolio_read"   on public.portfolio_items for select using (true);
+create policy "portfolio_insert" on public.portfolio_items for insert with check (true);
+create policy "portfolio_update" on public.portfolio_items for update using (true) with check (true);
+create policy "portfolio_delete" on public.portfolio_items for delete using (true);

@@ -4,11 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { createSupabaseClient, type Post, type Timeline } from "@/lib/supabase";
+import { createSupabaseClient, type Post, type Timeline, type PortfolioItem } from "@/lib/supabase";
 import ThemeToggle from "../components/ThemeToggle";
 
 type Category = "dev-log" | "problem-solving" | "paper-review" | "etc";
-type Section = "posts" | "timeline";
+type Section = "posts" | "timeline" | "portfolio";
 
 type PostFormData = {
   title: string;
@@ -42,6 +42,29 @@ const emptyTimelineForm: TimelineFormData = {
   end_date: "Present",
   title: "",
   description: "",
+  sort_order: 0,
+};
+
+type PortfolioFormData = {
+  id?: string;
+  title: string;
+  description: string;
+  tags: string; // comma-separated input
+  date: string;
+  link: string;
+  type: "project" | "paper";
+  published: boolean;
+  sort_order: number;
+};
+
+const emptyPortfolioForm: PortfolioFormData = {
+  title: "",
+  description: "",
+  tags: "",
+  date: "",
+  link: "",
+  type: "project",
+  published: true,
   sort_order: 0,
 };
 
@@ -457,11 +480,173 @@ function TimelineEditor({
   );
 }
 
+// ─── Portfolio Editor ─────────────────────────────────────────────────────────
+
+function PortfolioEditor({
+  initial,
+  onSave,
+  onCancel,
+}: {
+  initial: PortfolioFormData;
+  onSave: () => void;
+  onCancel: () => void;
+}) {
+  const [form, setForm] = useState<PortfolioFormData>(initial);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  const set = <K extends keyof PortfolioFormData>(k: K, v: PortfolioFormData[K]) =>
+    setForm((f) => ({ ...f, [k]: v }));
+
+  const handleSave = async () => {
+    if (!form.title.trim()) {
+      setError("Title is required");
+      return;
+    }
+    setSaving(true);
+    setError("");
+    const tags = form.tags
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+    const payload = {
+      title: form.title.trim(),
+      description: form.description.trim(),
+      tags,
+      date: form.date.trim(),
+      link: form.link.trim(),
+      type: form.type,
+      published: form.published,
+      sort_order: form.sort_order,
+    };
+    const { error: err } = form.id
+      ? await createSupabaseClient().from("portfolio_items").update(payload).eq("id", form.id)
+      : await createSupabaseClient().from("portfolio_items").insert(payload);
+    setSaving(false);
+    if (err) setError(err.message);
+    else onSave();
+  };
+
+  return (
+    <div className="min-h-screen px-8 py-14 max-w-xl mx-auto">
+      <div className="flex items-center justify-between mb-16">
+        <button
+          onClick={onCancel}
+          className="text-[9px] tracking-[0.3em] uppercase text-stone-300 dark:text-stone-600 hover:text-stone-600 dark:hover:text-stone-400 transition-colors duration-200 cursor-pointer"
+        >
+          ← Cancel
+        </button>
+        <div className="flex items-center gap-4">
+          {error && <span className="text-[9px] tracking-[0.15em] uppercase text-red-400">{error}</span>}
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="text-[9px] tracking-[0.3em] uppercase text-stone-400 dark:text-stone-500 border border-stone-200 dark:border-stone-700 px-5 py-2.5 hover:text-stone-700 dark:hover:text-stone-200 hover:border-stone-400 dark:hover:border-stone-500 transition-colors duration-200 cursor-pointer disabled:opacity-40"
+          >
+            {saving ? "Saving..." : "Save"}
+          </button>
+        </div>
+      </div>
+
+      <div className="mb-10">
+        <h2 className="text-xl font-light tracking-widest uppercase text-stone-800 dark:text-stone-100 transition-colors duration-300">
+          {form.id ? "Edit Item" : "New Item"}
+        </h2>
+      </div>
+
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">Title</label>
+          <input
+            type="text"
+            value={form.title}
+            onChange={(e) => set("title", e.target.value)}
+            className={inputClass}
+            placeholder="Project or paper title"
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-6">
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">Type</label>
+            <select
+              value={form.type}
+              onChange={(e) => set("type", e.target.value as "project" | "paper")}
+              className="bg-transparent border-b border-stone-200 dark:border-stone-700/60 py-2 text-sm font-light text-stone-700 dark:text-stone-300 outline-none focus:border-stone-400 dark:focus:border-stone-500 transition-colors duration-200 cursor-pointer"
+            >
+              <option value="project">Project</option>
+              <option value="paper">Paper</option>
+            </select>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">Date</label>
+            <input
+              type="text"
+              value={form.date}
+              onChange={(e) => set("date", e.target.value)}
+              className={inputClass}
+              placeholder="2024.03"
+            />
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">
+            Tags <span className="normal-case text-stone-300 dark:text-stone-600">(comma-separated)</span>
+          </label>
+          <input
+            type="text"
+            value={form.tags}
+            onChange={(e) => set("tags", e.target.value)}
+            className={inputClass}
+            placeholder="React, TypeScript, AI"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">Description</label>
+          <textarea
+            value={form.description}
+            onChange={(e) => set("description", e.target.value)}
+            className="w-full bg-transparent border-b border-stone-200 dark:border-stone-700/60 py-2 text-sm font-light text-stone-700 dark:text-stone-300 outline-none focus:border-stone-400 dark:focus:border-stone-500 transition-colors duration-200 placeholder:text-stone-200 dark:placeholder:text-stone-700 resize-none"
+            rows={3}
+            placeholder="Short description of the project or paper"
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label className="text-[9px] tracking-[0.25em] uppercase text-stone-400 dark:text-stone-500">Link</label>
+          <input
+            type="url"
+            value={form.link}
+            onChange={(e) => set("link", e.target.value)}
+            className={inputClass}
+            placeholder="https://github.com/..."
+          />
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => set("published", !form.published)}
+            className={`w-8 h-4 rounded-full relative transition-colors duration-200 cursor-pointer ${form.published ? "bg-stone-400 dark:bg-stone-500" : "bg-stone-200 dark:bg-stone-700"}`}
+          >
+            <span className={`absolute top-0.5 w-3 h-3 rounded-full bg-white transition-transform duration-200 ${form.published ? "translate-x-4" : "translate-x-0.5"}`} />
+          </button>
+          <span className="text-[9px] tracking-[0.2em] uppercase text-stone-400 dark:text-stone-500">
+            {form.published ? "Published" : "Draft"}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Admin Panel (Posts + Timeline tabs) ──────────────────────────────────────
 
 function AdminPanel({
   posts,
   timeline,
+  portfolio,
   section,
   onSectionChange,
   onNewPost,
@@ -470,9 +655,13 @@ function AdminPanel({
   onNewTimeline,
   onEditTimeline,
   onRefreshTimeline,
+  onNewPortfolio,
+  onEditPortfolio,
+  onRefreshPortfolio,
 }: {
   posts: Post[];
   timeline: Timeline[];
+  portfolio: PortfolioItem[];
   section: Section;
   onSectionChange: (s: Section) => void;
   onNewPost: () => void;
@@ -481,9 +670,13 @@ function AdminPanel({
   onNewTimeline: () => void;
   onEditTimeline: (item: Timeline) => void;
   onRefreshTimeline: () => void;
+  onNewPortfolio: () => void;
+  onEditPortfolio: (item: PortfolioItem) => void;
+  onRefreshPortfolio: () => void;
 }) {
   const [deletingPost, setDeletingPost] = useState<string | null>(null);
   const [deletingTimeline, setDeletingTimeline] = useState<string | null>(null);
+  const [deletingPortfolio, setDeletingPortfolio] = useState<string | null>(null);
   const [dragId, setDragId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>(null);
   const [reordering, setReordering] = useState(false);
@@ -525,6 +718,14 @@ function AdminPanel({
     onRefreshTimeline();
   };
 
+  const handleDeletePortfolio = async (id: string, title: string) => {
+    if (!confirm(`Delete "${title}"?`)) return;
+    setDeletingPortfolio(id);
+    await createSupabaseClient().from("portfolio_items").delete().eq("id", id);
+    setDeletingPortfolio(null);
+    onRefreshPortfolio();
+  };
+
   return (
     <div className="min-h-screen px-8 py-14 max-w-xl mx-auto">
       {/* Header */}
@@ -551,7 +752,7 @@ function AdminPanel({
 
       {/* Tab bar */}
       <div className="flex gap-8 mb-12 border-b border-stone-100 dark:border-stone-800/60">
-        {(["posts", "timeline"] as Section[]).map((tab) => (
+        {(["posts", "timeline", "portfolio"] as Section[]).map((tab) => (
           <button
             key={tab}
             onClick={() => onSectionChange(tab)}
@@ -561,7 +762,7 @@ function AdminPanel({
                 : "text-stone-300 dark:text-stone-600 border-transparent hover:text-stone-500 dark:hover:text-stone-400"
             }`}
           >
-            {tab === "posts" ? "Posts" : "Timeline"}
+            {tab === "posts" ? "Posts" : tab === "timeline" ? "Timeline" : "Portfolio"}
           </button>
         ))}
       </div>
@@ -627,6 +828,83 @@ function AdminPanel({
                       className="text-[9px] tracking-[0.2em] uppercase text-stone-300 dark:text-stone-600 hover:text-red-400 dark:hover:text-red-400 transition-colors duration-200 cursor-pointer disabled:opacity-40"
                     >
                       {deletingPost === post.id ? "..." : "Delete"}
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </>
+      )}
+
+      {/* ── Portfolio tab ────────────────────────────── */}
+      {section === "portfolio" && (
+        <>
+          <div className="flex items-center justify-between mb-10">
+            <div>
+              <h1 className="text-2xl font-light tracking-widest uppercase text-stone-800 dark:text-stone-100 transition-colors duration-300">
+                Portfolio
+              </h1>
+              <p className="mt-1.5 text-[9px] tracking-[0.3em] uppercase text-stone-400 dark:text-stone-500 transition-colors duration-300">
+                {portfolio.length} item{portfolio.length !== 1 ? "s" : ""}
+              </p>
+            </div>
+            <button
+              onClick={onNewPortfolio}
+              className="text-[9px] tracking-[0.3em] uppercase text-stone-400 dark:text-stone-500 border border-stone-200 dark:border-stone-700 px-5 py-2.5 hover:text-stone-700 dark:hover:text-stone-200 hover:border-stone-400 dark:hover:border-stone-500 transition-colors duration-200 cursor-pointer"
+            >
+              + New Item
+            </button>
+          </div>
+
+          {portfolio.length === 0 ? (
+            <div className="py-20 text-center">
+              <p className="text-[9px] tracking-[0.4em] uppercase text-stone-200 dark:text-stone-700">
+                No items yet
+              </p>
+            </div>
+          ) : (
+            <ul className="divide-y divide-stone-100 dark:divide-stone-800/60">
+              {portfolio.map((item) => (
+                <li key={item.id} className="py-6 flex items-start justify-between gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-3 mb-1.5 flex-wrap">
+                      {item.date && (
+                        <span className="text-[9px] tracking-[0.2em] uppercase text-stone-300 dark:text-stone-600 transition-colors duration-300">
+                          {item.date}
+                        </span>
+                      )}
+                      <span className="text-[8px] tracking-[0.15em] uppercase text-stone-400 dark:text-stone-500 border border-stone-200 dark:border-stone-700/80 px-1.5 py-0.5 transition-colors duration-300">
+                        {item.type}
+                      </span>
+                      {!item.published && (
+                        <span className="text-[8px] tracking-[0.15em] uppercase text-stone-300 dark:text-stone-600">
+                          Draft
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-sm font-light tracking-wide text-stone-700 dark:text-stone-300 truncate transition-colors duration-300">
+                      {item.title}
+                    </p>
+                    {item.tags.length > 0 && (
+                      <p className="mt-0.5 text-[11px] text-stone-400 dark:text-stone-500 transition-colors duration-300 truncate max-w-xs">
+                        {item.tags.join(", ")}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-4 shrink-0">
+                    <button
+                      onClick={() => onEditPortfolio(item)}
+                      className="text-[9px] tracking-[0.2em] uppercase text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 transition-colors duration-200 cursor-pointer"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeletePortfolio(item.id, item.title)}
+                      disabled={deletingPortfolio === item.id}
+                      className="text-[9px] tracking-[0.2em] uppercase text-stone-300 dark:text-stone-600 hover:text-red-400 dark:hover:text-red-400 transition-colors duration-200 cursor-pointer disabled:opacity-40"
+                    >
+                      {deletingPortfolio === item.id ? "..." : "Delete"}
                     </button>
                   </div>
                 </li>
@@ -781,13 +1059,20 @@ type TimelineEditorState =
   | { mode: "new" }
   | { mode: "edit"; item: Timeline };
 
+type PortfolioEditorState =
+  | { mode: "none" }
+  | { mode: "new" }
+  | { mode: "edit"; item: PortfolioItem };
+
 export default function AdminPage() {
   const [authChecked, setAuthChecked] = useState(false);
   const [authed, setAuthed] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
   const [timeline, setTimeline] = useState<Timeline[]>([]);
+  const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
   const [postEditor, setPostEditor] = useState<PostEditorState>({ mode: "none" });
   const [timelineEditor, setTimelineEditor] = useState<TimelineEditorState>({ mode: "none" });
+  const [portfolioEditor, setPortfolioEditor] = useState<PortfolioEditorState>({ mode: "none" });
   const [section, setSection] = useState<Section>("posts");
 
   const checkAuth = async () => {
@@ -813,9 +1098,17 @@ export default function AdminPage() {
     setTimeline((data as Timeline[]) ?? []);
   };
 
+  const fetchPortfolio = async () => {
+    const { data } = await createSupabaseClient()
+      .from("portfolio_items")
+      .select("*")
+      .order("sort_order", { ascending: true });
+    setPortfolio((data as PortfolioItem[]) ?? []);
+  };
+
   useEffect(() => { checkAuth(); }, []);
   useEffect(() => {
-    if (authed) { fetchPosts(); fetchTimeline(); }
+    if (authed) { fetchPosts(); fetchTimeline(); fetchPortfolio(); }
   }, [authed]);
 
   if (!authChecked) return null;
@@ -827,6 +1120,7 @@ export default function AdminPage() {
           setAuthed(true);
           fetchPosts();
           fetchTimeline();
+          fetchPortfolio();
         }}
       />
     );
@@ -874,10 +1168,32 @@ export default function AdminPage() {
     );
   }
 
+  if (portfolioEditor.mode === "new") {
+    return (
+      <PortfolioEditor
+        initial={{ ...emptyPortfolioForm, sort_order: portfolio.length }}
+        onSave={() => { setPortfolioEditor({ mode: "none" }); fetchPortfolio(); }}
+        onCancel={() => setPortfolioEditor({ mode: "none" })}
+      />
+    );
+  }
+
+  if (portfolioEditor.mode === "edit") {
+    const it = portfolioEditor.item;
+    return (
+      <PortfolioEditor
+        initial={{ id: it.id, title: it.title, description: it.description, tags: it.tags.join(", "), date: it.date, link: it.link, type: it.type, published: it.published, sort_order: it.sort_order }}
+        onSave={() => { setPortfolioEditor({ mode: "none" }); fetchPortfolio(); }}
+        onCancel={() => setPortfolioEditor({ mode: "none" })}
+      />
+    );
+  }
+
   return (
     <AdminPanel
       posts={posts}
       timeline={timeline}
+      portfolio={portfolio}
       section={section}
       onSectionChange={setSection}
       onNewPost={() => setPostEditor({ mode: "new" })}
@@ -886,6 +1202,9 @@ export default function AdminPage() {
       onNewTimeline={() => setTimelineEditor({ mode: "new" })}
       onEditTimeline={(item) => setTimelineEditor({ mode: "edit", item })}
       onRefreshTimeline={fetchTimeline}
+      onNewPortfolio={() => setPortfolioEditor({ mode: "new" })}
+      onEditPortfolio={(item) => setPortfolioEditor({ mode: "edit", item })}
+      onRefreshPortfolio={fetchPortfolio}
     />
   );
 }
