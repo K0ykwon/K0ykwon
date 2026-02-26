@@ -27,10 +27,10 @@ const navItems = [
   },
   {
     label: "Portfolio",
-    href: "#portfolio",
+    href: "/projects",
     sub: [
-      { label: "Work", href: "#work" },
-      { label: "Research", href: "#research" },
+      { label: "Projects", href: "/projects" },
+      { label: "Papers", href: "/papers" },
     ],
     delay: "animate-fade-up-delay-5",
   },
