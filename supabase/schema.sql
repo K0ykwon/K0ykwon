@@ -81,6 +81,21 @@ create table if not exists public.portfolio_items (
   created_at  timestamptz not null default now()
 );
 
+-- Migration: replace old `date` column with `start_date` / `end_date`
+do $$
+begin
+  if exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public' and table_name = 'portfolio_items' and column_name = 'date'
+  ) then
+    alter table public.portfolio_items rename column date to start_date;
+    alter table public.portfolio_items add column if not exists end_date text not null default 'Present';
+  end if;
+  -- Ensure columns exist even on fresh tables created before this migration ran
+  alter table public.portfolio_items add column if not exists start_date text not null default '';
+  alter table public.portfolio_items add column if not exists end_date   text not null default 'Present';
+end $$;
+
 alter table public.portfolio_items enable row level security;
 
 drop policy if exists "portfolio_read"   on public.portfolio_items;
