@@ -4,6 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import { createSupabaseClient } from "@/lib/supabase";
 import ThemeToggle from "../../components/ThemeToggle";
 import GiscusComments from "../../components/GiscusComments";
@@ -91,7 +93,10 @@ export default async function PostPage({
       <div className="w-full h-px bg-stone-100 dark:bg-stone-800/60 mb-10 transition-colors duration-300" />
 
       <div className="prose-blog">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm, remarkMath]}
+          rehypePlugins={[rehypeKatex]}
+        >
           {post.content}
         </ReactMarkdown>
       </div>
