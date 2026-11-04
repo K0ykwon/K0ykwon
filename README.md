@@ -94,32 +94,43 @@ Code, circuits and reproducibility materials for quantum computing research.
 </td>
 <td width="50%" valign="top">
 
-**[Portfolio](https://github.com/K0ykwon/k0ykwon.github.io)**
+**[MINEY](https://github.com/K0ykwon/MINEY)**
 
-My projects, research and notes, brought together in one website.
+AI-assisted rental contract analysis and legal information. Hackathon team project · AI developer.
 
-![Stars](https://img.shields.io/github/stars/K0ykwon/k0ykwon.github.io?style=flat-square&label=stars&color=1f6feb)
-![Forks](https://img.shields.io/github/forks/K0ykwon/k0ykwon.github.io?style=flat-square&label=forks&color=1f6feb)
+![Stars](https://img.shields.io/github/stars/K0ykwon/MINEY?style=flat-square&label=stars&color=1f6feb)
+![Forks](https://img.shields.io/github/forks/K0ykwon/MINEY?style=flat-square&label=forks&color=1f6feb)
 
-[Visit website →](https://k0ykwon.github.io/)
-
+[Repository](https://github.com/K0ykwon/MINEY) · [Demo video](https://www.youtube.com/watch?v=GuP2Haq75-Y)
 </td>
 </tr>
 </table>
 
 <sub>P2I is developed under the [PtwoI organization](https://github.com/PtwoI). The badge above covers my personal account; the overview and language cards also include public PtwoI repositories.</sub>
 
-## Recent Activity
+## Open-source Contributions
 
-Explore my latest public work on GitHub:
+| Project | Contribution | Pull request |
+| --- | --- | --- |
+| **SamoAI Example CLI** | Migrated the CLI to SamoAI 0.2.0 and fixed ES module compatibility. | [Merged #1](https://github.com/little-samo/SamoAI-Example-CLI/pull/1) |
+| **SamoAI Repository Storage** | Updated storage interfaces and TypeScript support for custom IDs. | [Merged #1](https://github.com/little-samo/SamoAI-Repository-Storage/pull/1) |
+| **UpstageAI Cookbook** | Contributed the MINEY hackathon project. | [PR #98](https://github.com/UpstageAI/cookbook/pull/98) |
 
-[Pull requests →](https://github.com/search?q=author%3AK0ykwon+is%3Apr+is%3Apublic&type=pullrequests&s=updated&o=desc) &nbsp;·&nbsp; [Issues →](https://github.com/search?q=author%3AK0ykwon+is%3Aissue+is%3Apublic&type=issues&s=updated&o=desc) &nbsp;·&nbsp; [All repositories →](https://github.com/K0ykwon?tab=repositories)
+## Selected Recent Activity
+
+- [Add executable TCN, N-BEATS and TabNet to P2I Architecture Atlas](https://github.com/PtwoI/p2i-kg/pull/15)
+- [Deploy the P2I architecture map](https://github.com/K0ykwon/k0ykwon.github.io/pull/8)
+- [Add executable Neural ODE, FNO and RWKV to P2I Architecture Atlas](https://github.com/PtwoI/p2i-kg/pull/14)
+
+<sub>Selected public pull requests; this list is curated and does not update automatically.</sub>
 
 ## Languages & Tools
 
 **Languages** &nbsp; Python · TypeScript  
 **ML & research** &nbsp; PyTorch · scikit-learn · Qiskit  
-**Development** &nbsp; React · FastAPI · Git · Docker
+**Development** &nbsp; React · Next.js · FastAPI · Git · Docker
+
+[AI Document Assistant](https://github.com/K0ykwon/AI-Document-Assistant) · [Portfolio & Blog](https://k0ykwon.github.io/) · [Next.js Example](https://github.com/K0ykwon/Creai-it-next_example_project)
 
 ---
 
