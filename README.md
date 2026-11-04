@@ -46,12 +46,6 @@ Student at Yonsei University
   </picture></a>
 </p>
 
-<a href="https://github.com/rowkavdev/GitHub-profile-stats"><picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=default" />
-  <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=light" />
-  <img width="100%" src="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=light" alt="Contributions over the last 30 days" />
-</picture></a>
-
 <p align="center">
   <a href="https://github.com/2016rshah/githubchart-api">
     <img src="https://ghchart.rshah.org/K0ykwon" alt="Public GitHub contributions over the past year" />
