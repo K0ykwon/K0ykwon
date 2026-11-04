@@ -10,6 +10,8 @@ Student at Yonsei University · AI/ML researcher and developer
 
 ## GitHub at a Glance
 
+![Public repositories](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Fusers%2FK0ykwon&query=%24.public_repos&label=public%20repositories&color=555555)
+
 <div align="center">
 
 <img height="170" src="https://github-readme-stats.vercel.app/api?username=K0ykwon&show_icons=true&include_all_commits=true&hide_border=true&theme=transparent" alt="Youngkwon Ko's GitHub statistics" />
