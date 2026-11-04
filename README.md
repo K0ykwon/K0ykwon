@@ -16,24 +16,40 @@ Student at Yonsei University
 ## ![GitHub Overview](assets/github-overview.webp)
 
 <p align="center">
-  <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img height="175" src="https://github-readme-stats.vercel.app/api?username=K0ykwon&show_icons=true&include_all_commits=true&hide_border=true&theme=transparent&title_color=1f6feb&icon_color=1f6feb" alt="GitHub statistics, including commits, pull requests, issues and stars" />
-  </a>
-  <a href="https://github.com/anuraghazra/github-readme-stats">
-    <img height="175" src="https://github-readme-stats.vercel.app/api/top-langs/?username=K0ykwon&layout=compact&langs_count=6&hide_border=true&theme=transparent&title_color=1f6feb" alt="Top languages in public repositories" />
+  <a href="https://github.com/rowkavdev/GitHub-profile-stats">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;hide=hours,week,trend&amp;show_ring=false" />
+      <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" />
+      <img width="495" src="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" alt="GitHub stats: commits, pull requests, issues, contributions and repositories" />
+    </picture>
   </a>
 </p>
 
 <p align="center">
+  <a href="https://github.com/rowkavdev/GitHub-profile-stats">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;layout=compact" />
+      <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" />
+      <img width="300" src="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" alt="Languages across public personal and PtwoI organization repositories" />
+    </picture>
+  </a>
   <a href="https://github.com/DenverCoder1/github-readme-streak-stats">
-    <img src="https://streak-stats.demolab.com/?user=K0ykwon&hide_border=true&theme=transparent&ring=1f6feb&fire=1f6feb&currStreakLabel=1f6feb" alt="GitHub contributions, current streak and longest streak" />
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=dark&amp;hide_border=true" />
+      <source media="(prefers-color-scheme: light)" srcset="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=default&amp;hide_border=true" />
+      <img width="400" src="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=default&amp;hide_border=true" alt="GitHub contribution streak" />
+    </picture>
   </a>
 </p>
 
 ## Contribution Activity
 
-<a href="https://github.com/K0ykwon">
-  <img width="100%" src="https://github-readme-activity-graph.vercel.app/graph?username=K0ykwon&theme=github-compact&hide_border=true" alt="Recent GitHub contribution activity graph" />
+<a href="https://github.com/rowkavdev/GitHub-profile-stats">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=default" />
+    <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=light" />
+    <img width="100%" src="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=light" alt="GitHub contributions over the last 30 days" />
+  </picture>
 </a>
 
 ## ![Featured Work](assets/featured-work.webp)
@@ -91,7 +107,7 @@ My projects, research and notes, brought together in one website.
 </tr>
 </table>
 
-<sub>P2I is developed under the [PtwoI organization](https://github.com/PtwoI). The public repository count above covers my personal account.</sub>
+<sub>P2I is developed under the [PtwoI organization](https://github.com/PtwoI). The badge above covers my personal account; the overview and language cards also include public PtwoI repositories.</sub>
 
 ## Recent Activity
 
