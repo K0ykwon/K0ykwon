@@ -114,9 +114,9 @@ AI-assisted rental contract analysis and legal information. Hackathon team proje
 ## Recent Activity
 
 <!--START_SECTION:activity-->
-1. [Add executable TCN, N-BEATS and TabNet to P2I Architecture Atlas](https://github.com/PtwoI/p2i-kg/pull/15)
-2. [Deploy the P2I architecture map](https://github.com/K0ykwon/k0ykwon.github.io/pull/8)
-3. [Add executable Neural ODE, FNO and RWKV to P2I Architecture Atlas](https://github.com/PtwoI/p2i-kg/pull/14)
+1. 🎉 Merged PR [#8](https://github.com/K0ykwon/k0ykwon.github.io/pull/8) in [K0ykwon/k0ykwon.github.io](https://github.com/K0ykwon/k0ykwon.github.io)
+2. 💪 Opened PR [#8](https://github.com/K0ykwon/k0ykwon.github.io/pull/8) in [K0ykwon/k0ykwon.github.io](https://github.com/K0ykwon/k0ykwon.github.io)
+3. 🎉 Merged PR [#15](https://github.com/PtwoI/p2i-kg/pull/15) in [PtwoI/p2i-kg](https://github.com/PtwoI/p2i-kg)
 <!--END_SECTION:activity-->
 
 <sub>Automatically updated from public GitHub events using [github-activity-readme](https://github.com/jamesgeorge007/github-activity-readme). Recent public issues, pull requests, comments and releases may appear.</sub>
