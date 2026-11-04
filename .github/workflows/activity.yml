@@ -1,0 +1,23 @@
+name: Update public GitHub activity
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/activity.yml
+  schedule:
+    - cron: '17 1 * * *'
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update recent public activity
+        uses: jamesgeorge007/github-activity-readme@4aefbfa1c222d70537dc6a02f0519266aab2b1ea
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          GH_USERNAME: K0ykwon
+          MAX_LINES: 5
+          COMMIT_MSG: 'Update public GitHub activity'

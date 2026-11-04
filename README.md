@@ -2,13 +2,14 @@
 
 # Youngkwon Ko
 
-**AI / ML · Research · Software**
+**AI & Machine Learning · Open-source Development · Quantum Computing**
 
 Student at Yonsei University
 
-[Website & Blog](https://k0ykwon.github.io/) &nbsp;·&nbsp; [Repositories](https://github.com/K0ykwon?tab=repositories) &nbsp;·&nbsp; [P2I Architecture Map](https://k0ykwon.github.io/apps/p2imap/)
+[Portfolio](https://k0ykwon.github.io/) &nbsp;·&nbsp; [LinkedIn](https://www.linkedin.com/in/youngkwon-ko-355984390/) &nbsp;·&nbsp; [Email](mailto:yko081524@yonsei.ac.kr) &nbsp;·&nbsp; [Architecture Map](https://k0ykwon.github.io/apps/p2imap/)
 
 [![Public repositories](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Fusers%2FK0ykwon&query=%24.public_repos&label=public%20repositories&color=1f6feb&style=flat-square)](https://github.com/K0ykwon?tab=repositories)
+[![Stars](https://img.shields.io/github/stars/K0ykwon?style=flat-square&label=stars&color=1f6feb)](https://github.com/K0ykwon?tab=repositories)
 [![GitHub followers](https://img.shields.io/github/followers/K0ykwon?label=followers&color=1f6feb&style=flat-square)](https://github.com/K0ykwon?tab=followers)
 
 </div>
@@ -16,41 +17,35 @@ Student at Yonsei University
 ## ![GitHub Overview](assets/github-overview.webp)
 
 <p align="center">
-  <a href="https://github.com/rowkavdev/GitHub-profile-stats">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;hide=hours,week,trend&amp;show_ring=false" />
-      <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" />
-      <img width="495" src="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" alt="GitHub stats: commits, pull requests, issues, contributions and repositories" />
-    </picture>
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/rowkavdev/GitHub-profile-stats">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;layout=compact" />
-      <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" />
-      <img width="300" src="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" alt="Languages across public personal and PtwoI organization repositories" />
-    </picture>
-  </a>
-  <a href="https://github.com/DenverCoder1/github-readme-streak-stats">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=dark&amp;hide_border=true" />
-      <source media="(prefers-color-scheme: light)" srcset="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=default&amp;hide_border=true" />
-      <img width="400" src="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=default&amp;hide_border=true" alt="GitHub contribution streak" />
-    </picture>
-  </a>
+  <a href="https://github.com/rowkavdev/GitHub-profile-stats"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;hide=hours,week,trend&amp;show_ring=false" />
+    <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" />
+    <img width="49%" src="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" alt="GitHub statistics" />
+  </picture></a>
+  <a href="https://github.com/rowkavdev/GitHub-profile-stats"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;layout=compact" />
+    <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" />
+    <img width="38%" src="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" alt="Languages in public repositories" />
+  </picture></a>
 </p>
 
 ## Contribution Activity
 
-<a href="https://github.com/rowkavdev/GitHub-profile-stats">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=default" />
-    <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=light" />
-    <img width="100%" src="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=light" alt="GitHub contributions over the last 30 days" />
-  </picture>
-</a>
+<p align="center">
+  <a href="https://github.com/DenverCoder1/github-readme-streak-stats"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=dark&amp;hide_border=true" />
+    <source media="(prefers-color-scheme: light)" srcset="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=default&amp;hide_border=true" />
+    <img width="495" src="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=default&amp;hide_border=true" alt="Total contributions, current streak and longest streak" />
+  </picture></a>
+</p>
+
+<a href="https://github.com/rowkavdev/GitHub-profile-stats"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=default" />
+  <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=light" />
+  <img width="100%" src="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=light" alt="Contributions over the last 30 days" />
+</picture></a>
+
+[View GitHub contribution calendar →](https://github.com/K0ykwon#user-profile-frame)
 
 ## ![Featured Work](assets/featured-work.webp)
 
@@ -58,9 +53,9 @@ Student at Yonsei University
 <tr>
 <td width="50%" valign="top">
 
-**[P2I Core](https://github.com/PtwoI/p2i-core)**
+**[P2I Ecosystem](https://github.com/PtwoI/p2i-core)**
 
-Trace, inspect and edit PyTorch model architectures with a local-first toolkit.
+Trace and inspect PyTorch execution, edit architectures, and save or restore models locally.
 
 ![Stars](https://img.shields.io/github/stars/PtwoI/p2i-core?style=flat-square&label=stars&color=1f6feb)
 ![Forks](https://img.shields.io/github/forks/PtwoI/p2i-core?style=flat-square&label=forks&color=1f6feb)
@@ -116,22 +111,41 @@ AI-assisted rental contract analysis and legal information. Hackathon team proje
 | **SamoAI Repository Storage** | Updated storage interfaces and TypeScript support for custom IDs. | [Merged #1](https://github.com/little-samo/SamoAI-Repository-Storage/pull/1) |
 | **UpstageAI Cookbook** | Contributed the MINEY hackathon project. | [PR #98](https://github.com/UpstageAI/cookbook/pull/98) |
 
-## Selected Recent Activity
+## Recent Activity
 
-- [Add executable TCN, N-BEATS and TabNet to P2I Architecture Atlas](https://github.com/PtwoI/p2i-kg/pull/15)
-- [Deploy the P2I architecture map](https://github.com/K0ykwon/k0ykwon.github.io/pull/8)
-- [Add executable Neural ODE, FNO and RWKV to P2I Architecture Atlas](https://github.com/PtwoI/p2i-kg/pull/14)
+<!--START_SECTION:activity-->
+1. [Add executable TCN, N-BEATS and TabNet to P2I Architecture Atlas](https://github.com/PtwoI/p2i-kg/pull/15)
+2. [Deploy the P2I architecture map](https://github.com/K0ykwon/k0ykwon.github.io/pull/8)
+3. [Add executable Neural ODE, FNO and RWKV to P2I Architecture Atlas](https://github.com/PtwoI/p2i-kg/pull/14)
+<!--END_SECTION:activity-->
 
-<sub>Selected public pull requests; this list is curated and does not update automatically.</sub>
+<sub>Automatically updated from public GitHub events using [github-activity-readme](https://github.com/jamesgeorge007/github-activity-readme). Recent public issues, pull requests, comments and releases may appear.</sub>
 
 ## Languages & Tools
 
-**Languages** &nbsp; Python · TypeScript  
-**ML & research** &nbsp; PyTorch · scikit-learn · Qiskit  
-**Development** &nbsp; React · Next.js · FastAPI · Git · Docker
+**Machine Learning**  
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)
 
-[AI Document Assistant](https://github.com/K0ykwon/AI-Document-Assistant) · [Portfolio & Blog](https://k0ykwon.github.io/) · [Next.js Example](https://github.com/K0ykwon/Creai-it-next_example_project)
+**Web & Applications**  
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-087EA4?style=flat-square&logo=react&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-222222?style=flat-square&logo=nextdotjs&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
+
+**Research & Development**  
+![Qiskit](https://img.shields.io/badge/Qiskit-6929C4?style=flat-square&logo=qiskit&logoColor=white)
+![Git](https://img.shields.io/badge/Git-F05032?style=flat-square&logo=git&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat-square&logo=linux&logoColor=black)
+
+[AI Document Assistant](https://github.com/K0ykwon/AI-Document-Assistant) — PDF analysis and RAG · [Portfolio](https://k0ykwon.github.io/) · [Next.js Example](https://github.com/K0ykwon/Creai-it-next_example_project)
+
+## Connect
+
+[Portfolio](https://k0ykwon.github.io/) · [LinkedIn](https://www.linkedin.com/in/youngkwon-ko-355984390/) · [Email](mailto:yko081524@yonsei.ac.kr)
 
 ---
 
-<sub>Statistics are generated from available GitHub data by third-party services and may be cached. Commit and contribution coverage varies by service; language shares describe repository contents, not proficiency.</sub>
+<sub>Cards use public GitHub data and may be cached. The stats card labels its commit period; contributions and streaks are credited to the account. Repository, star and language counts include personal and PtwoI public repositories, while the top repository badge covers the personal account only. Languages describe repository contents, not proficiency.</sub>
