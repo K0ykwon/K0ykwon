@@ -16,31 +16,49 @@ Student at Yonsei University
 
 ## ![GitHub Overview](assets/github-overview.webp)
 
-<div align="center">
+<p align="center">
+  <a href="https://github.com/rowkavdev/GitHub-profile-stats">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;hide=hours,week,trend&amp;show_ring=false" />
+      <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" />
+      <img width="495" src="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" alt="GitHub statistics" />
+    </picture>
+  </a>
+</p>
 
-[![GitHub statistics](https://ghstats.dev/api/card?username=K0ykwon&orgs=PtwoI&theme=default&hide=hours,week,trend&show_ring=false#gh-dark-mode-only)](https://github.com/rowkavdev/GitHub-profile-stats)
-[![GitHub statistics](https://ghstats.dev/api/card?username=K0ykwon&orgs=PtwoI&theme=light&hide=hours,week,trend&show_ring=false#gh-light-mode-only)](https://github.com/rowkavdev/GitHub-profile-stats)
-
-[![Most used languages](https://ghstats.dev/api/langs?username=K0ykwon&orgs=PtwoI&theme=default&layout=compact#gh-dark-mode-only)](https://github.com/rowkavdev/GitHub-profile-stats)
-[![Most used languages](https://ghstats.dev/api/langs?username=K0ykwon&orgs=PtwoI&theme=light&layout=compact#gh-light-mode-only)](https://github.com/rowkavdev/GitHub-profile-stats)
-
-</div>
+<p align="center">
+  <a href="https://github.com/rowkavdev/GitHub-profile-stats">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;layout=compact" />
+      <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" />
+      <img width="300" src="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" alt="Languages in public repositories" />
+    </picture>
+  </a>
+</p>
 
 ## Contribution Activity
 
-<div align="center">
+<p align="center">
+  <a href="https://github.com/DenverCoder1/github-readme-streak-stats"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=dark&amp;hide_border=true" />
+    <source media="(prefers-color-scheme: light)" srcset="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=default&amp;hide_border=true" />
+    <img width="495" src="https://streak-stats.demolab.com/?user=K0ykwon&amp;theme=default&amp;hide_border=true" alt="Total contributions, current streak and longest streak" />
+  </picture></a>
+</p>
 
-[![GitHub contribution streak](https://streak-stats.demolab.com/?user=K0ykwon&theme=dark&hide_border=true#gh-dark-mode-only)](https://github.com/DenverCoder1/github-readme-streak-stats)
-[![GitHub contribution streak](https://streak-stats.demolab.com/?user=K0ykwon&theme=default&hide_border=true#gh-light-mode-only)](https://github.com/DenverCoder1/github-readme-streak-stats)
+<a href="https://github.com/rowkavdev/GitHub-profile-stats"><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=default" />
+  <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=light" />
+  <img width="100%" src="https://ghstats.dev/api/sparkline?username=K0ykwon&amp;days=30&amp;width=800&amp;height=160&amp;theme=light" alt="Contributions over the last 30 days" />
+</picture></a>
 
-[![Contributions in the last 30 days](https://ghstats.dev/api/sparkline?username=K0ykwon&days=30&width=800&height=160&theme=default#gh-dark-mode-only)](https://github.com/rowkavdev/GitHub-profile-stats)
-[![Contributions in the last 30 days](https://ghstats.dev/api/sparkline?username=K0ykwon&days=30&width=800&height=160&theme=light#gh-light-mode-only)](https://github.com/rowkavdev/GitHub-profile-stats)
-
-[![Public GitHub contributions over the past year](https://ghchart.rshah.org/K0ykwon)](https://github.com/2016rshah/githubchart-api)
+<p align="center">
+  <a href="https://github.com/2016rshah/githubchart-api">
+    <img src="https://ghchart.rshah.org/K0ykwon" alt="Public GitHub contributions over the past year" />
+  </a>
+</p>
 
 [View GitHub contribution calendar →](https://github.com/K0ykwon)
-
-</div>
 
 ## ![Featured Work](assets/featured-work.webp)
 
