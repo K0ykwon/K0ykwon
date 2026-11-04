@@ -17,16 +17,23 @@ Student at Yonsei University
 ## ![GitHub Overview](assets/github-overview.webp)
 
 <p align="center">
-  <a href="https://github.com/rowkavdev/GitHub-profile-stats"><picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;hide=hours,week,trend&amp;show_ring=false" />
-    <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" />
-    <img width="49%" src="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" alt="GitHub statistics" />
-  </picture></a>
-  <a href="https://github.com/rowkavdev/GitHub-profile-stats"><picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;layout=compact" />
-    <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" />
-    <img width="38%" src="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" alt="Languages in public repositories" />
-  </picture></a>
+  <a href="https://github.com/rowkavdev/GitHub-profile-stats">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;hide=hours,week,trend&amp;show_ring=false" />
+      <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" />
+      <img width="495" src="https://ghstats.dev/api/card?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;hide=hours,week,trend&amp;show_ring=false" alt="GitHub statistics" />
+    </picture>
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/rowkavdev/GitHub-profile-stats">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=default&amp;layout=compact" />
+      <source media="(prefers-color-scheme: light)" srcset="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" />
+      <img width="300" src="https://ghstats.dev/api/langs?username=K0ykwon&amp;orgs=PtwoI&amp;theme=light&amp;layout=compact" alt="Languages in public repositories" />
+    </picture>
+  </a>
 </p>
 
 ## Contribution Activity
