@@ -13,7 +13,7 @@ Student at Yonsei University
 
 </div>
 
-## GitHub Overview
+## ![GitHub Overview](assets/github-overview.webp)
 
 <p align="center">
   <a href="https://github.com/anuraghazra/github-readme-stats">
@@ -36,7 +36,7 @@ Student at Yonsei University
   <img width="100%" src="https://github-readme-activity-graph.vercel.app/graph?username=K0ykwon&theme=github-compact&hide_border=true" alt="Recent GitHub contribution activity graph" />
 </a>
 
-## Featured Repositories
+## ![Featured Work](assets/featured-work.webp)
 
 <table>
 <tr>
