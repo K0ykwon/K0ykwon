@@ -1,3 +1,5 @@
+![THE BADDIST TOMATO EVER](assets/the-baddist-tomato-ever.webp)
+
 <div align="center">
 
 # Youngkwon Ko
