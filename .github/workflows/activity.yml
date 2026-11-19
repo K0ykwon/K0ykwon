@@ -1,23 +1,44 @@
-name: Update public GitHub activity
+name: Refresh public profile
 on:
-  workflow_dispatch:
+  pull_request:
+    paths: ['README.md', 'assets/**', 'scripts/**', '.github/workflows/activity.yml']
   push:
-    paths:
-      - .github/workflows/activity.yml
+    branches: [main]
+    paths: ['scripts/refresh.py', '.github/workflows/activity.yml']
+  workflow_dispatch:
   schedule:
-    - cron: '17 1 * * *'
+    - cron: '47 3 * * *'
 permissions:
-  contents: write
+  contents: read
 jobs:
-  update:
+  check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Update recent public activity
-        uses: jamesgeorge007/github-activity-readme@4aefbfa1c222d70537dc6a02f0519266aab2b1ea
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          GH_USERNAME: K0ykwon
-          MAX_LINES: 5
-          COMMIT_MSG: 'Update public GitHub activity'
+          persist-credentials: false
+      - run: python3 -m unittest discover -s scripts -v
+      - run: python3 scripts/refresh.py
+  publish:
+    needs: check
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency: publish-public-graphs
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: main
+          persist-credentials: false
+      - run: python3 scripts/refresh.py
+      - name: Publish changed graphs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          git add -- assets/dynamic/{commits,commits-mobile,public-prs,public-prs-mobile}.svg
+          if git diff --cached --quiet; then exit 0; fi
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -qm 'Refresh public activity graphs'
+          gh auth setup-git --hostname github.com
+          git push origin HEAD:main
