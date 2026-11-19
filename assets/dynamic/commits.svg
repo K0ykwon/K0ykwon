@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="297" viewBox="0 0 900 297" role="img" aria-labelledby="t"><title id="t">PUBLIC INDEXED COMMITS: 208, 2025-04 to 2026-10</title><rect width="100%" height="100%" fill="black"/><g font-family="Arial,Helvetica,sans-serif" fill="#e0dcd7">
+<text x="32" y="34" text-anchor="start" fill="#ff574a" font-size="16" font-weight="700">PUBLIC INDEXED COMMITS</text>
+<text x="32" y="95" text-anchor="start" fill="#e0dcd7" font-size="56" font-weight="700">208</text>
+<text x="32" y="124" text-anchor="start" fill="#e0dcd7" font-size="18" font-weight="400">public default-branch commits</text>
+<rect x="32.00" y="209.38" width="30.80" height="7.62" fill="#e0dcd7"><title>2025-04: 10</title></rect>
+<rect x="76.00" y="216.00" width="30.80" height="1.00" fill="#555"><title>2025-05: 0</title></rect>
+<rect x="120.00" y="211.67" width="30.80" height="5.33" fill="#e0dcd7"><title>2025-06: 7</title></rect>
+<rect x="164.00" y="216.00" width="30.80" height="1.00" fill="#555"><title>2025-07: 0</title></rect>
+<rect x="208.00" y="211.67" width="30.80" height="5.33" fill="#e0dcd7"><title>2025-08: 7</title></rect>
+<rect x="252.00" y="197.19" width="30.80" height="19.81" fill="#e0dcd7"><title>2025-09: 26</title></rect>
+<rect x="296.00" y="202.52" width="30.80" height="14.48" fill="#e0dcd7"><title>2025-10: 19</title></rect>
+<rect x="340.00" y="216.00" width="30.80" height="1.00" fill="#555"><title>2025-11: 0</title></rect>
+<rect x="384.00" y="216.00" width="30.80" height="1.00" fill="#555"><title>2025-12: 0</title></rect>
+<rect x="428.00" y="216.00" width="30.80" height="1.00" fill="#555"><title>2026-01: 0</title></rect>
+<rect x="472.00" y="216.00" width="30.80" height="1.00" fill="#555"><title>2026-02: 0</title></rect>
+<rect x="516.00" y="216.00" width="30.80" height="1.00" fill="#555"><title>2026-03: 0</title></rect>
+<rect x="560.00" y="214.71" width="30.80" height="2.29" fill="#e0dcd7"><title>2026-04: 3</title></rect>
+<rect x="604.00" y="216.00" width="30.80" height="1.00" fill="#555"><title>2026-05: 0</title></rect>
+<rect x="648.00" y="216.00" width="30.80" height="1.00" fill="#555"><title>2026-06: 0</title></rect>
+<rect x="692.00" y="216.00" width="30.80" height="1.00" fill="#555"><title>2026-07: 0</title></rect>
+<rect x="736.00" y="216.00" width="30.80" height="1.00" fill="#555"><title>2026-08: 0</title></rect>
+<rect x="780.00" y="177.38" width="30.80" height="39.62" fill="#e0dcd7"><title>2026-09: 52</title></rect>
+<rect x="824.00" y="153.00" width="30.80" height="64.00" fill="#ff574a"><title>2026-10: 84</title></rect>
+<text x="32" y="241" text-anchor="start" fill="#e0dcd7" font-size="14" font-weight="400">2025-04</text>
+<text x="868" y="241" text-anchor="end" fill="#e0dcd7" font-size="14" font-weight="400">2026-10</text>
+<text x="32" y="277" text-anchor="start" fill="#b9b4ae" font-size="15" font-weight="400">Monthly totals · known automation excluded</text></g></svg>
