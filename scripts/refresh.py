@@ -2,6 +2,7 @@
 import datetime as dt
 import json
 from pathlib import Path
+import re
 import tempfile
 import time
 from urllib.parse import urlencode
@@ -119,7 +120,19 @@ def refresh(dest,today):
             file.replace(dest/file.name)
     return data
 
+def refresh_profile(assets, now):
+    data = refresh(assets / 'dynamic', now.astimezone(dt.UTC).date())
+    korean_time = now.astimezone(dt.timezone(dt.timedelta(hours=9)))
+    stamp = korean_time.strftime('ACTIVITY UPDATED  %d %b %Y · %H:%M KST').upper()
+    for name in ('profile.svg', 'profile-mobile.svg'):
+        card = assets / 'static' / name
+        svg, count = re.subn(r'(?<=id="activity-updated">)[^<]*(?=</text>)', stamp, card.read_text())
+        if count != 1:
+            raise ValueError(f'Expected one activity timestamp in {card}')
+        card.write_text(svg)
+    return data
+
 if __name__=='__main__':
-    data=refresh(ROOT/'assets/dynamic',dt.datetime.now(dt.UTC).date())
+    data = refresh_profile(ROOT / 'assets', dt.datetime.now(dt.UTC))
     print('Public pull requests:',sum(n for _,n in data['pr_days']))
     print('Indexed public commits:',sum(n for _,n in data['public_commit_months']))
