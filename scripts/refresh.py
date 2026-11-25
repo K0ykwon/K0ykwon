@@ -32,32 +32,52 @@ def api(path):
                 raise
             time.sleep(65)
 
-def results(kind,base,qualifier,first,last):
-    query=f'{base} {qualifier}:{first}..{last}'
-    seen=set()
-    page=1
-    target=None
+def search_window(kind, base, qualifier, first, last):
+    """Return complete rows, or None if the date window must be split."""
+    query = f'{base} {qualifier}:{first}..{last}'
+    seen = set()
+    rows = []
+    page = 1
+    target = None
     while True:
-        params=urlencode({'q':query,'per_page':100,'page':page,
-                          'sort':'created' if kind=='issues' else 'author-date','order':'asc'})
-        batch=api('/search/'+kind+'?'+params)
+        params = urlencode({'q': query, 'per_page': 100, 'page': page,
+                            'sort': 'created' if kind == 'issues' else 'author-date',
+                            'order': 'asc'})
+        batch = api('/search/' + kind + '?' + params)
+        if batch['incomplete_results'] is True:
+            return None
         check(batch['incomplete_results'] is False)
-        if batch['total_count']>1000:
-            check(page==1 and first<last)
-            mid=first+(last-first)//2
-            yield from results(kind,base,qualifier,first,mid)
-            yield from results(kind,base,qualifier,mid+dt.timedelta(days=1),last)
-            return
-        if target is None:target=batch['total_count']
-        check(batch['total_count']==target)
-        for item in batch['items']:
-            key=item['id'] if kind=='issues' else (item['repository']['id'],item['sha'])
+        count = batch['total_count']
+        check(type(count) is int and count >= 0)
+        if count > 1000:
+            return None
+        if target is None:
+            target = count
+        check(count == target)
+        items = batch['items']
+        check(len(items) == min(100, target - len(rows)))
+        for item in items:
+            key = item['id'] if kind == 'issues' else (item['repository']['id'], item['sha'])
             check(key not in seen)
             seen.add(key)
-            yield item
-        if len(seen)==target:return
-        check(len(batch['items'])==100 and len(seen)<target)
-        page+=1
+            rows.append(item)
+        if len(rows) == target:
+            return rows
+        page += 1
+
+
+def results(kind, base, qualifier, first, last):
+    # Do not expose a page until its entire window is confirmed complete.
+    rows = search_window(kind, base, qualifier, first, last)
+    if rows is not None:
+        yield from rows
+        return
+    if first == last:
+        raise ValueError(f'Incomplete or over-limit public {kind} search for {first}')
+    mid = first + (last - first) // 2
+    yield from results(kind, base, qualifier, first, mid)
+    yield from results(kind, base, qualifier, mid + dt.timedelta(days=1), last)
+
 
 def snapshot(today):
     start=today-dt.timedelta(days=30)
